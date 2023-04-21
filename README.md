@@ -27,16 +27,16 @@ To use the library in your own project, you can include the header files for the
 
 ```c
 #include <stdio.h>
-#include "libs21/foo.h"
+#include "libs21.h"
 
 int main() {
-    printf("%d\n", foo());
+    printf("%s\n", s21::to_upper("hello world!"));
     return 0;
 }
 ```
 Then you can compile your program with:
 ```bash
-gcc -o myprogram myprogram.c -I/path/to/libs21/include -L/path/to/libs21 -ls21
+gcc -o myprogram myprogram.c -I/path/to/libs21/include -L/path/to/libs21
 ```
 Make sure to replace /path/to/libs21 with the actual path to your libs21 project directory.
 
