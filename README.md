@@ -14,8 +14,7 @@ This library contains the following functions:
 ## Requirements
 To use this library, you'll need the following:
 
-A C++ compiler that supports C++17 or later
-...
+A clang++ that supports C++17 or later
 
 ## Building
 
