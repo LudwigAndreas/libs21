@@ -1,3 +1,5 @@
+#include "s21.h"
+
 #include <string>
 #include <vector>
 

@@ -53,7 +53,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
-
+SET (GTest_Library GTest::gtest_main)
 
 #
 # Configure Files
@@ -92,4 +92,4 @@ ENDIF (EXISTS "${MAINFOLDER}/include/${PROJECT_NAME}" AND IS_DIRECTORY "${MAINFO
 #
 # Add Documentation Targets
 #
-INCLUDE (DocumentationTargets)
+#INCLUDE (DocumentationTargets)
