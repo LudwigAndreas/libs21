@@ -9,7 +9,7 @@ SET (project_MOC_HEADERS ../include/s21.h)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS})
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS} PropertiesReader.cc PropertiesReader.h)
 #ADD_EXECUTABLE(${project_BIN} ${project_SRCS} ${project_MOC_SRCS_GENERATED})
 TARGET_LINK_LIBRARIES(${project_BIN} ${project_LIBS})
 SET_TARGET_PROPERTIES(${project_BIN} PROPERTIES VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}" OUTPUT_NAME ${project_BIN} CLEAN_DIRECT_OUTPUT 1)
