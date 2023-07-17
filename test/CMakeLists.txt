@@ -10,7 +10,7 @@ SET (test_LIBS ${GTest_Library})
 
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
-ADD_EXECUTABLE(${test_BIN} ${project_SRCS} ${test_SRCS})
+ADD_EXECUTABLE(${test_BIN} ${project_SRCS} ${test_SRCS} logger_test.cc)
 TARGET_LINK_LIBRARIES(${test_BIN} ${test_LIBS})
 TARGET_INCLUDE_DIRECTORIES(${test_BIN} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

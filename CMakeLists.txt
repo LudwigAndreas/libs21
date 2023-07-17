@@ -20,9 +20,22 @@ SET (APPLICATION_ID "${APPLICATION_VENDOR_ID}.${PROJECT_NAME}")
 
 
 #
+# C++ Standard
+#
+SET (CMAKE_CXX_STANDARD 17)
+SET (CMAKE_CXX_STANDARD_REQUIRED 17)
+
+#
 # Debugging Options
 #
 SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
+
+#
+# Compilation Flags
+#
+SET(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
+SET(CMAKE_CXX_FLAGS_DEBUG "-g -Og -fsanitize=address")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -march=native")
 
 #
 # Project Output Paths

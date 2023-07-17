@@ -9,29 +9,29 @@
 #include <string>
 
 #include "s21.h"
-
+namespace s21 {
 class PropertiesReader {
  protected
   std::map<std::string, std::string> properties;
   std::string file_path;
 
-  PropertiesReader();
   ~PropertiesReader();
 
+  bool updateProperties();
+
  public
-  static ProtectedReader getInstance();
+  PropertiesReader();
 
-  static ProtectedReader getInstance(std::string file_path);
+  PropertiesReader(const std::string &file_path);
 
-  void set_path();
+  void set_path(const std::string file_path);
 
-  void get_properties();
+  std::map<std::string, std::string> get_properties();
 
-  void get_property(std::string key);
+  std::string get_property(const std::string &key);
 
   void update();
-
-
 };
+}
 
 #endif //S21_SRC_PROPERTIESREADER_H_
