@@ -11,7 +11,7 @@
 #include "s21.h"
 namespace s21 {
 class PropertiesReader {
- protected
+ protected:
   std::map<std::string, std::string> properties;
   std::string file_path;
 
@@ -19,7 +19,7 @@ class PropertiesReader {
 
   bool updateProperties();
 
- public
+ public:
   PropertiesReader();
 
   PropertiesReader(const std::string &file_path);

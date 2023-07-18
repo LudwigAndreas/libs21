@@ -4,12 +4,12 @@
 #include <sstream>
 #include <map>
 
-static std::string erase_comment(std::string line, char comment_symbol = '#', size_t start_pos = 0, size_t end_pos = std::string::npos) {
-  size_t comment_pos = line.find(comment_symbol, start_pos);
-  if (comment_pos != std::string::npos && comment_pos < end_pos)
-    line.erase(comment_pos);
-  return line;
-}
+//static std::string erase_comment(std::string line, char comment_symbol = '#', size_t start_pos = 0, size_t end_pos = std::string::npos) {
+//  size_t comment_pos = line.find(comment_symbol, start_pos);
+//  if (comment_pos != std::string::npos && comment_pos < end_pos)
+//    line.erase(comment_pos);
+//  return line;
+//}
 
 std::map<std::string, std::string> s21::properties_reader(const std::string &file_path) {
   static char comment_symb = '#';

@@ -9,15 +9,14 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <thread>
+#include <ctime>
+#include <iomanip>
 
-#include <time.h>
+#define WRITELOG(logObj, level, message) logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, message);
 
-#define WRITELOG(logObj, level, message) logObj.Log(level, __FILEW__, __LINE__, __FUNCTIONW__, message);
-
-typedef std::wostream ToStream;
+typedef std::ostream ToStream;
 typedef std::string String;
-
-
 
 namespace s21::diagnostic {
 
@@ -40,6 +39,7 @@ enum class LogItem {
   LogLevel = 0x40
 };
 
+// template accepts an IThreading successor
 template<class ThreadingProtection>
 class Logger {
  private:
@@ -65,7 +65,7 @@ class Logger {
              static_cast<int>(LogItem::DateTime) |
              static_cast<int>(LogItem::LoggerName) |
              static_cast<int>(LogItem::LogLevel))
-      : level_(level), name_(std::move(name)), loggable_item_(loggableItems) {}
+      : level_(level), name_(name), loggable_item_(loggableItems) {}
 
   ~Logger() = default;
 
@@ -94,9 +94,9 @@ class Logger {
   }
 
   void Log(LogLevel level, String file, int line, String func, String message) {
-    mtx_.lock();
+    threading_protection_.lock();
 
-    for (auto iter = output_streams_.begin(); iter < output_streams_.end(); ++iter) {
+    for (auto iter = output_streams_.begin(); iter != output_streams_.end(); iter = std::next(iter)) {
       if (level < iter->level) {
         continue;
       }
@@ -105,39 +105,40 @@ class Logger {
 
       if (loggable_item_ & static_cast<int>(LogItem::DateTime))
         written = writeDatetime(written, p_stream);
-      if (loggable_item_ & static_cast<int>(LogItem::ThreadId))
-        written = write<int>(std::this_thread::get_id(), written, p_stream);
+      if (loggable_item_ & static_cast<int>(LogItem::ThreadId)) {
+        int thread_id = static_cast<int>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
+        written = write < int > (thread_id, written, p_stream);
+      }
       if (loggable_item_ & static_cast<int>(LogItem::LoggerName))
-        written = write<String>(name_.c_str(), written, p_stream);
+        written = write < String > (name_.c_str(), written, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::LogLevel)) {
-        char[6] str_level;
+        char str_level[6];
         logLevelToString(level, str_level);
-        written = write<String>(str_level, written, p_stream);
+        written = write < String > (str_level, written, p_stream);
       }
       if (loggable_item_ & static_cast<int>(LogItem::Function))
-        written = write<String>(func.c_str(), written, p_stream);
+        written = write < String > (func.c_str(), written, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::Filename))
-        written = write<String>(file, written, p_stream);
+        written = write < String > (file, written, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::LineNumber))
-        written = write<String>(line, written, p_stream);
+        written = write < int > (line, written, p_stream);
 
-      written = write<String>(message, written, p_stream);
+      written = write < String > (message, written, p_stream);
 
       if (written) {
         (*p_stream) << std::endl;
         p_stream->flush();
       }
     }
-    mtx_.unlock();
+    threading_protection_.unlock();
   }
 
  private:
-  int loggable_item_;
   LogLevel level_;
   String name_;
+  int loggable_item_;
   std::vector<StreamInfo> output_streams_;
   ThreadingProtection threading_protection_;
-  std::mutex mtx_;
 
   template<class T>
   inline bool write(T data, bool written, ToStream *wostream) {
@@ -154,35 +155,25 @@ class Logger {
       (*wostream) << separator;
     }
 
-    time_t now = time(nullptr);
-    struct tm tstruct;
-    char str_date_time[datetime_format.size()];
-
-    tstruct = *std::localtime(&now);
-    strftime(str_date_time, sizeof(str_date_time), datetime_format.c_str(), &tstruct);
-    (*wostream) << str_date_time;
+    time_t time = std::time(nullptr);
+    auto tm = *std::localtime(&time);
+    (*wostream) << std::put_time(&tm, datetime_format.c_str());
     return true;
   }
 
   void logLevelToString(LogLevel level, char *str_level) {
     switch (level) {
-      case LogLevel::Fatal:
-        std::strncpy("FATAL", str_level, 6);
+      case LogLevel::Fatal:std::strncpy(str_level, "FATAL", 6);
         break;
-      case LogLevel::Error:
-        std::strncpy("ERROR", str_level, 6);
+      case LogLevel::Error:std::strncpy(str_level, "ERROR", 6);
         break;
-      case LogLevel::Warn:
-        std::strncpy(" WARN", str_level, 6);
+      case LogLevel::Warn:std::strncpy(str_level, " WARN", 6);
         break;
-      case LogLevel::Info:
-        std::strncpy(" INFO", str_level, 6);
+      case LogLevel::Info:std::strncpy(str_level, " INFO", 6);
         break;
-      case LogLevel::Debug:
-        std::strncpy("DEBUG", str_level, 6);
+      case LogLevel::Debug:std::strncpy(str_level, "DEBUG", 6);
         break;
-      case LogLevel::Trace:
-        std::strncpy("TRACE", str_level, 6);
+      case LogLevel::Trace:std::strncpy(str_level, "TRACE", 6);
         break;
     }
   }

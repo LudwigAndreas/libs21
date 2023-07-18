@@ -17,6 +17,7 @@ bool s21::PropertiesReader::updateProperties() {
   if (!this->file_path.empty()) {
     this->properties = s21::properties_reader(file_path);
   }
+  return true;
 }
 
 s21::PropertiesReader::PropertiesReader(const std::string& file_path) {
@@ -33,7 +34,7 @@ std::map<std::string, std::string> s21::PropertiesReader::get_properties() {
 }
 
 std::string s21::PropertiesReader::get_property(const std::string& key) {
-  return this->get_property(key);
+  return this->properties.at(key);
 }
 
 void s21::PropertiesReader::update() {
