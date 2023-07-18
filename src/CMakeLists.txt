@@ -9,20 +9,18 @@ SET (project_MOC_HEADERS ../include/s21.h)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-#ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS}
-##    PropertiesReader.cc
-##    PropertiesReader.h
-#    logger/Logger.h
-#    logger/threading/LoggerThreading.h
-#    logger/threading/IThreading.h)
-
-ADD_EXECUTABLE(${project_BIN}
-    ${project_SRCS}
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS}
     logger/Logger.h
     logger/threading/LoggerThreading.h
-    logger/threading/IThreading.h
-    main.cc
-    )
+    logger/threading/IThreading.h)
+
+#ADD_EXECUTABLE(${project_BIN}
+#    ${project_SRCS}
+#    logger/Logger.h
+#    logger/threading/LoggerThreading.h
+#    logger/threading/IThreading.h
+#    logger/main.cc
+#    )
 
 #ADD_EXECUTABLE(${project_BIN} ${project_SRCS} ${project_MOC_SRCS_GENERATED})
 TARGET_LINK_LIBRARIES(${project_BIN} ${project_LIBS})
