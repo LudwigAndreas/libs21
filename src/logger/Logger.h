@@ -13,7 +13,7 @@
 #include <ctime>
 #include <iomanip>
 
-#define WRITELOG(logObj, level, message) logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, message);
+#define WRITELOG(logObj, level, message) logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, message)
 
 typedef std::ostream ToStream;
 typedef std::string String;
@@ -44,11 +44,11 @@ template<class ThreadingProtection>
 class Logger {
  private:
   struct StreamInfo {
-    ToStream *p_stream;
+    ToStream &p_stream;
     bool owned;
     LogLevel level;
 
-    StreamInfo(ToStream *p_stream, bool owned, LogLevel level) :
+    StreamInfo(ToStream &p_stream, bool owned, LogLevel level) :
         p_stream(p_stream),
         owned(owned),
         level(level) {}
@@ -67,7 +67,9 @@ class Logger {
              static_cast<int>(LogItem::LogLevel))
       : level_(level), name_(name), loggable_item_(loggableItems) {}
 
-  ~Logger() = default;
+  ~Logger() {
+//    ClearOutputStream();
+  };
 
   void AddOutputStream(ToStream &os, bool own, LogLevel level) {
     AddOutputStream(&os, own, level);
@@ -82,12 +84,12 @@ class Logger {
   }
 
   void AddOutputStream(ToStream *os, bool own, LogLevel level) {
-    StreamInfo stream_info(os, own, level);
+    StreamInfo stream_info(*os, own, level);
     output_streams_.push_back(stream_info);
   }
 
   void ClearOutputStream() {
-    for (auto iter = output_streams_.begin(); iter < output_streams_.end(); ++iter) {
+    for (auto iter = output_streams_.begin(); iter != output_streams_.end(); iter = std::next(iter)) {
       if (iter->owned)
         delete iter->p_stream;
     }
@@ -101,7 +103,7 @@ class Logger {
         continue;
       }
       bool written = false;
-      ToStream *p_stream = iter->p_stream;
+      ToStream *p_stream = &iter->p_stream;
 
       if (loggable_item_ & static_cast<int>(LogItem::DateTime))
         written = writeDatetime(written, p_stream);
@@ -163,17 +165,23 @@ class Logger {
 
   void logLevelToString(LogLevel level, char *str_level) {
     switch (level) {
-      case LogLevel::Fatal:std::strncpy(str_level, "FATAL", 6);
+      case LogLevel::Fatal:
+        std::strncpy(str_level, "FATAL", 6);
         break;
-      case LogLevel::Error:std::strncpy(str_level, "ERROR", 6);
+      case LogLevel::Error:
+        std::strncpy(str_level, "ERROR", 6);
         break;
-      case LogLevel::Warn:std::strncpy(str_level, " WARN", 6);
+      case LogLevel::Warn:
+        std::strncpy(str_level, " WARN", 6);
         break;
-      case LogLevel::Info:std::strncpy(str_level, " INFO", 6);
+      case LogLevel::Info:
+        std::strncpy(str_level, " INFO", 6);
         break;
-      case LogLevel::Debug:std::strncpy(str_level, "DEBUG", 6);
+      case LogLevel::Debug:
+        std::strncpy(str_level, "DEBUG", 6);
         break;
-      case LogLevel::Trace:std::strncpy(str_level, "TRACE", 6);
+      case LogLevel::Trace:
+        std::strncpy(str_level, "TRACE", 6);
         break;
     }
   }

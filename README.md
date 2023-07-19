@@ -8,8 +8,7 @@ This library contains the following functions:
 * `split`: Split string using some delimiter
 * `to_lower`: Converts string to lowercase
 * `to_upper`: Converts string to uppercase
-* `load_bmp`: Read bmp file into unsigned char array
-* `bmp_data_to_grayscale`: Converts bmp data into grayscale
+* `Logger` class: Logger that was inspired as Log4C++  
 
 ## Requirements
 To use this library, you'll need the following:

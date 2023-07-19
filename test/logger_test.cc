@@ -20,17 +20,16 @@ class LoggerTest : public ::testing::Test {
 };
 
 TEST(LoggerTest, logger_init) {
-  s21::diagnostic::Logger<s21::threading::LoggerProcessNoLock> logger(s21::diagnostic::LogLevel::Info, std::string("s21"));
+  s21::diagnostic::Logger<s21::threading::LoggerProcessNoLock> logger(s21::diagnostic::LogLevel::Info, "s21");
 
   logger.AddOutputStream(std::cout, false, s21::diagnostic::LogLevel::Error);
-  std::fstream fs;
-  fs.open("s21.log", std::fstream::in | std::fstream::app);
-  logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Info);
+  auto fs = std::fstream("s21.log", std::fstream::trunc | std::fstream::out);
+  logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
 
-  WRITELOG(logger, s21::diagnostic::LogLevel::Trace, "Trace")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Debug, "Debug")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Info, "Info")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Warn, "Warn")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Error, "Error")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Fatal, "Fatal")
+  WRITELOG(logger, s21::diagnostic::LogLevel::Trace, "Trace");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Debug, "Debug");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Info, "Info");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Warn, "Warn");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Error, "Error");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Fatal, "Fatal");
 }

@@ -1,5 +1,5 @@
-#include "logger/Logger.h"
-#include "logger/threading/LoggerThreading.h"
+#include "Logger.h"
+#include "threading/LoggerThreading.h"
 
 #include <fstream>
 
@@ -10,10 +10,10 @@ int main() {
   auto fs = std::fstream("s21.log", std::fstream::trunc | std::fstream::out);
   logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
 
-  WRITELOG(logger, s21::diagnostic::LogLevel::Trace, "Trace")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Debug, "Debug")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Info, "Info")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Warn, "Warn")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Error, "Error")
-  WRITELOG(logger, s21::diagnostic::LogLevel::Fatal, "Fatal")
+  WRITELOG(logger, s21::diagnostic::LogLevel::Trace, "Trace");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Debug, "Debug");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Info, "Info");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Warn, "Warn");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Error, "Error");
+  WRITELOG(logger, s21::diagnostic::LogLevel::Fatal, "Fatal");
 }
