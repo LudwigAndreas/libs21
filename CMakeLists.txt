@@ -64,7 +64,7 @@ FetchContent_Declare(
     GIT_TAG        release-1.11.0
 )
 FetchContent_MakeAvailable(googletest)
-add_library(GTest::GTest INTERFACE IMPORTED)
+add_library(GTest::GTest INTERFACE IMPORTED include/logger/logger-macros.h include/logger/parser/PatternLayout.h)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 SET (GTest_Library GTest::gtest_main)
 

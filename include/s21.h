@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-#include "../src/PropertiesReader.h"
+#include "logger/PropertiesReader.h"
 
 namespace s21 {
 std::string to_lower(std::string str);

@@ -10,9 +10,9 @@ SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
 ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS}
-    logger/Logger.h
-    logger/threading/LoggerThreading.h
-    logger/threading/IThreading.h)
+    ../include/logger/Logger.h
+    ../include/logger/LoggerThreading.h
+    ../include/logger/IThreading.h PatternParser.cc ../include/logger/parser/PatternParser.h)
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}

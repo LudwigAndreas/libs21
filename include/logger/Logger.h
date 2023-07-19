@@ -12,11 +12,19 @@
 #include <thread>
 #include <ctime>
 #include <iomanip>
+#include <sstream>
 
-#define WRITELOG(logObj, level, message) logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, message)
+#include "logger/logger-macros.h"
+
+#define WRITELOG(logObj, level, message) { \
+  std::stringstream oss_;                  \
+  oss_ << message;                         \
+  logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, oss_.str()); }
 
 typedef std::ostream ToStream;
+typedef std::istream InStream;
 typedef std::string String;
+typedef char Char;
 
 namespace s21::diagnostic {
 
@@ -54,8 +62,8 @@ class Logger {
         level(level) {}
   };
 
-  const char separator = ' ';
-  const std::string datetime_format = "%Y/%m/%d.%X";
+  char separator = ' ';
+  std::string datetime_format = "%Y/%m/%d.%X";
 
  public:
   Logger(s21::diagnostic::LogLevel level, String name,
@@ -70,6 +78,9 @@ class Logger {
   ~Logger() {
 //    ClearOutputStream();
   };
+
+  Logger(const Logger<ThreadingProtection> &other) = default;
+  Logger<ThreadingProtection> &operator=(const Logger<ThreadingProtection> &other) noexcept = default;
 
   void AddOutputStream(ToStream &os, bool own, LogLevel level) {
     AddOutputStream(&os, own, level);
@@ -165,23 +176,17 @@ class Logger {
 
   void logLevelToString(LogLevel level, char *str_level) {
     switch (level) {
-      case LogLevel::Fatal:
-        std::strncpy(str_level, "FATAL", 6);
+      case LogLevel::Fatal:std::strncpy(str_level, "FATAL", 6);
         break;
-      case LogLevel::Error:
-        std::strncpy(str_level, "ERROR", 6);
+      case LogLevel::Error:std::strncpy(str_level, "ERROR", 6);
         break;
-      case LogLevel::Warn:
-        std::strncpy(str_level, " WARN", 6);
+      case LogLevel::Warn:std::strncpy(str_level, " WARN", 6);
         break;
-      case LogLevel::Info:
-        std::strncpy(str_level, " INFO", 6);
+      case LogLevel::Info:std::strncpy(str_level, " INFO", 6);
         break;
-      case LogLevel::Debug:
-        std::strncpy(str_level, "DEBUG", 6);
+      case LogLevel::Debug:std::strncpy(str_level, "DEBUG", 6);
         break;
-      case LogLevel::Trace:
-        std::strncpy(str_level, "TRACE", 6);
+      case LogLevel::Trace:std::strncpy(str_level, "TRACE", 6);
         break;
     }
   }

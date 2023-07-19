@@ -9,8 +9,8 @@
 #include <ostream>
 #include <fstream>
 
-#include "../src/logger/Logger.h"
-#include "../src/logger/threading/LoggerThreading.h"
+#include "logger/Logger.h"
+#include "logger/LoggerThreading.h"
 
 class LoggerTest : public ::testing::Test {
  protected:
