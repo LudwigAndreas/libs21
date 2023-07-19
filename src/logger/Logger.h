@@ -12,6 +12,9 @@
 #include <thread>
 #include <ctime>
 #include <iomanip>
+#include <map>
+#include <functional>
+#include <any>
 
 #define WRITELOG(logObj, level, message) logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, message);
 
@@ -54,8 +57,56 @@ class Logger {
         level(level) {}
   };
 
+  struct Parsing {
+    struct Value {
+      std::string raw;
+      std::string flags;
+      unsigned char type;
+    };
+
+    std::string templ;
+    std::vector<Value> values;
+
+    Parsing(std::string templ) : templ(templ) {
+      std::string templ_ = templ;
+      int pos;
+      int substr;
+      std::function<Value (std::string &)> func;
+
+      while (templ_.size() && templ_.find('%') != std::string::npos) {
+        if (templ_[0] == '%')
+          func = &parse_variable;
+        else
+          func = &parse_text;
+          // pos = parse_text(templ_);
+        values.push_back(func(templ_));
+      }
+      if (templ_.size())
+        values.push_back(Value(templ_, "", '\0'));
+      
+      return values.size();
+    }
+
+    Value parse_variable(std::string &templ_) {
+      std::string lhs;
+      lhs = templ_.substr(0, 2);
+      templ_ = templ_.substr(2);
+      return Value(lhs, "", lhs[1]);
+    }
+
+    Value parse_text(std::string &templ_) {
+      std::string lhs;
+      int pos = templ_.find_first_of('%');
+      // if (pos == -1)
+      lhs = templ_.substr(0, pos);
+      templ_ = templ_.substr(pos);
+      return Value(lhs, "", '\0');
+    }
+  };
+  std::map<unsigned char, std::function<String (std::any)>> print_funcs;
   const char separator = ' ';
   const std::string datetime_format = "%Y/%m/%d.%X";
+  const std::string log_format;
 
  public:
   Logger(s21::diagnostic::LogLevel level, String name,
@@ -64,8 +115,10 @@ class Logger {
              static_cast<int>(LogItem::LineNumber) |
              static_cast<int>(LogItem::DateTime) |
              static_cast<int>(LogItem::LoggerName) |
-             static_cast<int>(LogItem::LogLevel))
-      : level_(level), name_(name), loggable_item_(loggableItems) {}
+             static_cast<int>(LogItem::LogLevel)
+             ,std::string log_format_ = "%d %f:%l %p %m"
+  )
+      : level_(level), name_(name), loggable_item_(loggableItems), log_format(log_format_) {}
 
   ~Logger() = default;
 
@@ -107,28 +160,28 @@ class Logger {
         written = writeDatetime(written, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::ThreadId)) {
         int thread_id = static_cast<int>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
-        written = write < int > (thread_id, written, p_stream);
+        written = write < int > (thread_id, p_stream);
       }
       if (loggable_item_ & static_cast<int>(LogItem::LoggerName))
-        written = write < String > (name_.c_str(), written, p_stream);
+        written = write < String > (name_.c_str(), p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::LogLevel)) {
         char str_level[6];
         logLevelToString(level, str_level);
-        written = write < String > (str_level, written, p_stream);
+        written = write < String > (str_level, p_stream);
       }
       if (loggable_item_ & static_cast<int>(LogItem::Function))
-        written = write < String > (func.c_str(), written, p_stream);
+        written = write < String > (func.c_str(), p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::Filename))
-        written = write < String > (file, written, p_stream);
+        written = write < String > (file, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::LineNumber))
-        written = write < int > (line, written, p_stream);
+        written = write < int > (line, p_stream);
 
-      written = write < String > (message, written, p_stream);
+      written = write < String > (message, p_stream);
 
-      if (written) {
+      // if (written) {
         (*p_stream) << std::endl;
-        p_stream->flush();
-      }
+        // p_stream->flush();
+      // }
     }
     threading_protection_.unlock();
   }
@@ -140,20 +193,25 @@ class Logger {
   std::vector<StreamInfo> output_streams_;
   ThreadingProtection threading_protection_;
 
+  void createPrintFunctions() {
+    print_funcs['p'] = [](auto p_stream, auto text) {
+      std::stringstream ss;
+      ss << text;
+
+    };
+  }
+
   template<class T>
-  inline bool write(T data, bool written, ToStream *wostream) {
-    if (written) {
-      (*wostream) << separator;
-    }
+  inline bool write(T data, ToStream *wostream) {
 
     (*wostream) << data;
     return true;
   }
 
   inline bool writeDatetime(bool written, ToStream *wostream) {
-    if (written) {
-      (*wostream) << separator;
-    }
+    // if (written) {
+    //   (*wostream) << separator;
+    // }
 
     time_t time = std::time(nullptr);
     auto tm = *std::localtime(&time);
@@ -162,18 +220,25 @@ class Logger {
   }
 
   void logLevelToString(LogLevel level, char *str_level) {
+
     switch (level) {
-      case LogLevel::Fatal:std::strncpy(str_level, "FATAL", 6);
+      case LogLevel::Fatal:
+        std::strncpy(str_level, "FATAL", 6);
         break;
-      case LogLevel::Error:std::strncpy(str_level, "ERROR", 6);
+      case LogLevel::Error:
+        std::strncpy(str_level, "ERROR", 6);
         break;
-      case LogLevel::Warn:std::strncpy(str_level, " WARN", 6);
+      case LogLevel::Warn:
+        std::strncpy(str_level, " WARN", 6);
         break;
-      case LogLevel::Info:std::strncpy(str_level, " INFO", 6);
+      case LogLevel::Info:
+        std::strncpy(str_level, " INFO", 6);
         break;
-      case LogLevel::Debug:std::strncpy(str_level, "DEBUG", 6);
+      case LogLevel::Debug:
+        std::strncpy(str_level, "DEBUG", 6);
         break;
-      case LogLevel::Trace:std::strncpy(str_level, "TRACE", 6);
+      case LogLevel::Trace:
+        std::strncpy(str_level, "TRACE", 6);
         break;
     }
   }
