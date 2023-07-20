@@ -21,7 +21,7 @@ class PatternParserTest : public ::testing::Test {
 
 TEST_F(PatternParserTest, patter_init_test) {
 //  WRITELOG(logger_, s21::diagnostic::LogLevel::Trace, "test set up");
-  s21::parse::PatternParser::parse("[%d{yyyy-MM-dd HH:mm:ss}] %c %-5p - %m%n");
+  s21::parse::PatternParser::parse("[%date{yyyy-MM-dd HH:mm:ss}] %c %-5p - %m%n");
 //  auto expect = "[2020-12-24 15:31:46] root INFO  - Hello there!";
 //  s21::parse::PatternParser::parse("[%d] %c %-5p - %m%n");
 //  auto expect = "[2020-12-24 15:35:39,225] root INFO  - Hello there!";

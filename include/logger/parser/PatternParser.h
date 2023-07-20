@@ -9,8 +9,10 @@
 #include <map>
 
 #include "logger/Logger.h"
+#include "FormattingInfo.h"
 
 namespace s21::parse {
+
 class PatternParser {
  private:
   static const Char ESCAPE_CHAR;
@@ -24,6 +26,9 @@ class PatternParser {
   };
 
   PatternParser();
+
+  size_t extractOptions(const String pattern, size_t i, std::vector<String> &options);
+  size_t finalise(const String pattern, size_t i, std::vector<String> &options);
 
  public:
   static std::vector<String> parse(const String &pattern);
