@@ -13,6 +13,12 @@ class PatternLayout {
 
   String conversion_pattern;
 
+  struct test {
+    std::func();
+    std::vector<String> options;
+    s21::parse::FormattingInfo info;
+  };
+
   std::map<String, String> patternConverters;
 
   std::map<String, String> patternFields;

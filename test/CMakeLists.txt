@@ -6,6 +6,8 @@ FILE (GLOB_RECURSE project_SRCS
     ../src/*.cc
     )
 
+INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
+
 SET (test_LIBS ${GTest_Library})
 
 SET (test_BIN ${PROJECT_NAME}-unittests)

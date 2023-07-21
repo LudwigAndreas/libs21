@@ -5,7 +5,7 @@
 #ifndef S21_INCLUDE_LOGGER_PARSER_FORMATTINGINFO_H_
 #define S21_INCLUDE_LOGGER_PARSER_FORMATTINGINFO_H_
 
-namespace s21::parser {
+namespace s21::parse {
 class FormattingInfo {
  private:
   bool left_align_;
