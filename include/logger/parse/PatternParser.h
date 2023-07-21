@@ -14,6 +14,8 @@
 
 namespace s21::parse {
 
+typedef std::map<String, PatternConverter*> PatternMap;
+
 class PatternParser {
  private:
   static const Char ESCAPE_CHAR;
@@ -35,19 +37,32 @@ class PatternParser {
       size_t i, String& conv_buf,
       String& current_literal);
 
-  static size_t extractOptions(const String pattern,
+  static size_t extractOptions(const String &pattern,
                                size_t i,
                                std::vector<String> &options);
+
   static size_t finalise(Char c,
-                         const String pattern,
+                         const String& pattern,
                          size_t i,
                          String &current_literal,
                          const FormattingInfo &formatting_info,
                          std::vector<FormattingInfo>& formatting_infos,
-                         std::vector<String> conversion_specifiers);
+                         std::vector<PatternConverter *>& converters,
+                         const PatternMap& pattern_map);
+
+  static PatternConverter* createConverter(
+      const String& converter_id,
+      String& current_literal,
+      std::vector<String>& options,
+      const PatternMap& pattern_map,
+      const FormattingInfo &formatting_info
+  );
 
  public:
-  static std::vector<String> parse(const String &pattern);
+  static void parse(const String &pattern,
+             std::vector<PatternConverter *> &converters,
+             std::vector<FormattingInfo> &formatting_infos,
+             const PatternMap &pattern_map);
 };
 }
 

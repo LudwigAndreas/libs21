@@ -4,6 +4,7 @@
 
 #include "logger/parse/PatternParser.h"
 #include "../test/utils/logger.inc"
+#include "logger/parse/LiteralPatternConverter.h"
 
 #include <map>
 
@@ -18,11 +19,10 @@ bool PatternParser::isUnicodeIdentifier(Char ch) {
       (ch == 0x5F);
 }
 
-std::vector<String> PatternParser::parse(const String &pattern) {
-
-  std::vector<String> conversion_specifiers;
-  std::vector<FormattingInfo> formatting_infos;
-  std::vector<String> options;
+void PatternParser::parse(const String &pattern,
+                          std::vector<PatternConverter *> &converters,
+                          std::vector<FormattingInfo> &formatting_infos,
+                          const PatternMap &pattern_map) {
 
   String current_literal;
   FormattingInfo formatting_info = FormattingInfo::getDefault();
@@ -43,14 +43,16 @@ std::vector<String> PatternParser::parse(const String &pattern) {
         }
 
         if (c == ESCAPE_CHAR) {
-          // peek at the next char
           if (pattern[i] == ESCAPE_CHAR) {
             current_literal.append(1, c);
             i++;
           } else {
             if (!current_literal.empty()) {
-              conversion_specifiers.push_back(current_literal);
-              formatting_infos.push_back(FormattingInfo::getDefault());
+              converters.push_back(LiteralPatternConverter::newInstance
+                                       (current_literal));
+              converters.back()->setFormattingInfo(FormattingInfo::getDefault
+              ());
+//              formatting_infos.push_back(FormattingInfo::getDefault());
               current_literal.erase(current_literal.begin(),
                                     current_literal.end());
             }
@@ -82,10 +84,9 @@ std::vector<String> PatternParser::parse(const String &pattern) {
 
           default:
 
-            if ((c >= 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
-//              formatting_info = set minLength to (c - 0x30)
+            if ((c > 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
               formatting_info = FormattingInfo(formatting_info.isLeftAligned(),
-                                               formatting_info.getMinLength(),
+                                               (c - 0x30),
                                                formatting_info.getMaxLength()
               );
               state = MIN_STATE;
@@ -97,12 +98,11 @@ std::vector<String> PatternParser::parse(const String &pattern) {
                            current_literal,
                            formatting_info,
                            formatting_infos,
-                           conversion_specifiers);
-//              conversion_specifiers.push_back(current_literal);
-//            save formatting info
+                           converters,
+                           pattern_map);
 
               state = LITERAL_STATE;
-//              formatting_info = set default
+              formatting_info = FormattingInfo::getDefault();
 
               if (!current_literal.empty()) {
                 current_literal.erase(current_literal.begin(),
@@ -117,7 +117,10 @@ std::vector<String> PatternParser::parse(const String &pattern) {
         current_literal.append(1, c);
 
         if ((c >= 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
-//          formatting_info = set minLength to (previous-value * 10) + (c - 0x30)
+          formatting_info = FormattingInfo(
+              formatting_info.isLeftAligned(),
+              (formatting_info.getMinLength() * 10) + (c - 0x30),
+              formatting_info.getMaxLength());
 
         } else if (c == 0x2E /* '.' */) {
           state = DOT_STATE;
@@ -130,9 +133,10 @@ std::vector<String> PatternParser::parse(const String &pattern) {
                        current_literal,
                        formatting_info,
                        formatting_infos,
-                       conversion_specifiers);;
+                       converters,
+                       pattern_map);
           state = LITERAL_STATE;
-//          formatting_info = default;
+          formatting_info = FormattingInfo::getDefault();
 
           if (!current_literal.empty()) {
             current_literal.erase(current_literal.begin(),
@@ -146,8 +150,11 @@ std::vector<String> PatternParser::parse(const String &pattern) {
 
         current_literal.append(1, c);
 
-        if ((c >= 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
-//          formatting_info = set maxLength to (c - 0x30)
+        if ((c > 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
+          formatting_info = FormattingInfo(formatting_info.isLeftAligned(),
+                                           formatting_info.getMinLength(),
+                                           (c - 0x30));
+
           state = MAX_STATE;
         } else {
 
@@ -164,6 +171,10 @@ std::vector<String> PatternParser::parse(const String &pattern) {
 
         if ((c >= 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
 //          formatting_info = set maxLength to ((previous_value * 10) + (c - 0x30))
+          formatting_info = FormattingInfo(formatting_info.isLeftAligned(),
+                                           formatting_info.getMinLength(),
+                                           formatting_info.getMaxLength() *
+                                               10 + (c - 0x30));
         } else {
 
           i = finalise(c,
@@ -172,9 +183,10 @@ std::vector<String> PatternParser::parse(const String &pattern) {
                        current_literal,
                        formatting_info,
                        formatting_infos,
-                       conversion_specifiers);
+                       converters,
+                       pattern_map);
           state = LITERAL_STATE;
-//          formatting_info = default
+          formatting_info = FormattingInfo::getDefault();
 
           if (!current_literal.empty()) {
             current_literal.erase(current_literal.begin(),
@@ -187,24 +199,19 @@ std::vector<String> PatternParser::parse(const String &pattern) {
   } // while
 
   if (current_literal.length() != 0) {
-    conversion_specifiers.push_back(current_literal);
-//            save formatting info as default
+    converters.push_back(LiteralPatternConverter::newInstance
+                             (current_literal));
+    converters.back()->setFormattingInfo(FormattingInfo::getDefault
+                                             ());
   }
-
-//  test
-//  for (auto &spec: conversion_specifiers) {
-//    LOG_TRACE("spec \"" << spec << "\"");
-//  }
-//  test
-  return conversion_specifiers;
 }
 
-size_t PatternParser::extractOptions(const String pattern,
+size_t PatternParser::extractOptions(const String &pattern,
                                      size_t i,
                                      std::vector<String> &options) {
   while ((i < pattern.length()) && (pattern[i] == 0x7B /* '{' */)) {
     size_t end = pattern.find(0x7D, i);
-    if (end == pattern.npos) {
+    if (end == String::npos) {
       break;
     }
 
@@ -218,8 +225,8 @@ size_t PatternParser::extractOptions(const String pattern,
 
 size_t PatternParser::extractConverter(
     Char last_char, const String &pattern,
-    size_t i, String& conv_buf,
-    String& current_literal) {
+    size_t i, String &conv_buf,
+    String &current_literal) {
 
   if (!conv_buf.empty()) {
     conv_buf.erase(conv_buf.begin(), conv_buf.end());
@@ -234,29 +241,79 @@ size_t PatternParser::extractConverter(
   return i;
 }
 
+PatternConverter *PatternParser::createConverter(
+    const String &converter_id,
+    String &current_literal,
+    std::vector<String> &options,
+    const PatternMap &pattern_map,
+    const FormattingInfo &formatting_info
+) {
+  String converter_name(converter_id);
+  for (size_t i = converter_id.length(); i > 0; i--) {
+    converter_name = converter_name.substr(0, i);
+    auto iter = pattern_map.find(converter_name);
+
+    if (iter != pattern_map.end()) {
+      current_literal.erase(current_literal.begin(),
+                            current_literal.end() -
+                                (converter_id.length() - 1));
+      (iter->second)->setOptions(options);
+      (iter->second)->setFormattingInfo(formatting_info);
+      return (iter->second);
+    }
+  }
+//  unrecognized format specifier
+  return nullptr;
+}
+
 size_t PatternParser::finalise(Char c,
-                               const String pattern,
+                               const String &pattern,
                                size_t i,
                                String &current_literal,
                                const FormattingInfo &formatting_info,
-                               std::vector<FormattingInfo>& formatting_infos,
-                               std::vector<String> conversion_specifiers) {
-
-  (void) formatting_info;
+                               std::vector<FormattingInfo> &formatting_infos,
+                               std::vector<PatternConverter *>&
+                               converters,
+                               const PatternMap &pattern_map) {
 
   String convBuf;
   i = extractConverter(c, pattern, i, convBuf, current_literal);
-  LOG_DEBUG(current_literal << " | " << convBuf)
 
   if (convBuf.empty()) {
-    conversion_specifiers.push_back(current_literal);
-    formatting_infos.push_back(FormattingInfo::getDefault());
+    // Empty conversion specifier
+    converters.push_back(LiteralPatternConverter::newInstance
+                             (current_literal));
+    converters.back()->setFormattingInfo(FormattingInfo::getDefault
+                                             ());
   } else {
-    String converter(convBuf);
-
+    String converter_id(convBuf);
 
     std::vector<String> options;
     i = extractOptions(pattern, i, options);
+
+    PatternConverter *pc(createConverter(converter_id,
+                                         current_literal,
+                                         options, pattern_map,
+                                         formatting_info));
+    if (pc == nullptr) {
+      // Unrecognized conversion specifier
+      LOG_ERROR("Unrecognized conversion specifier: \"" << current_literal <<
+                                                        "\"")
+      converters.push_back(LiteralPatternConverter::newInstance
+                               (current_literal));
+      converters.back()->setFormattingInfo(FormattingInfo::getDefault
+                                               ());
+    } else {
+      converters.push_back(pc);
+      formatting_infos.push_back(formatting_info);
+
+      if (current_literal.length() > 0) {
+        converters.push_back(LiteralPatternConverter::newInstance
+                                 (current_literal));
+        converters.back()->setFormattingInfo(FormattingInfo::getDefault
+                                                 ());
+      }
+    }
   }
   return i;
 }

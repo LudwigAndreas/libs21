@@ -18,16 +18,17 @@ FormattingInfo FormattingInfo::getDefault() {
   return def;
 }
 
-bool FormattingInfo::isLeftAligned() {
+bool FormattingInfo::isLeftAligned() const {
   return left_align_;
 }
 
-int FormattingInfo::getMinLength() {
+int FormattingInfo::getMinLength() const {
   return min_length_;
 }
 
-int FormattingInfo::getMaxLength() {
+int FormattingInfo::getMaxLength() const {
   return max_length_;
 }
+FormattingInfo::FormattingInfo() {}
 
 }

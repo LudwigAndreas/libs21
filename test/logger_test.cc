@@ -20,9 +20,13 @@ class LoggerTest : public ::testing::Test {
 };
 
 TEST(LoggerTest, logger_init) {
-  s21::diagnostic::Logger<s21::threading::LoggerProcessNoLock> logger(s21::diagnostic::LogLevel::Info, "s21");
+  s21::diagnostic::Logger<s21::threading::LoggerProcessNoLock>
+      logger(s21::diagnostic::LogLevel::Info, "s21");
 
-  logger.AddOutputStream(std::cout, false, s21::diagnostic::LogLevel::Error);
+  logger.AddOutputStream(std::cout, false, s21::diagnostic::LogLevel::Trace);
+  logger.AddOutputStream(new std::fstream("output.txt", std::fstream::out),
+                         true,
+                         s21::diagnostic::LogLevel::Trace);
   auto fs = std::fstream("s21.log", std::fstream::trunc | std::fstream::out);
   logger.AddOutputStream(fs, true, s21::diagnostic::LogLevel::Trace);
 

@@ -13,16 +13,19 @@ class FormattingInfo {
   int max_length_;
 
  public:
+  FormattingInfo();
+
+  ~FormattingInfo() = default;
 
   FormattingInfo(bool left_align, int min_length, int max_length);
 
   static FormattingInfo getDefault();
 
-  bool isLeftAligned();
+  bool isLeftAligned() const;
 
-  int getMinLength();
+  int getMinLength() const;
 
-  int getMaxLength();
+  int getMaxLength() const;
 };
 }
 

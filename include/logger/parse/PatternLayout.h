@@ -25,7 +25,6 @@ class PatternLayout {
   String trace_color_ = "\\x1B[34m";
 
  protected:
-  void getFormatSpecs()
 
  public:
   PatternLayout();

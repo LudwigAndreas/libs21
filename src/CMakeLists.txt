@@ -20,7 +20,7 @@ ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS}
     ../include/logger/IThreading.h
     ../include/logger/parse/PatternParser.h
     ../include/logger/parse/PatternConverter.h
-    ../include/logger/parse/PatternLayout.h)
+    ../include/logger/parse/PatternLayout.h PatternConverter.cc LiteralPatternConverter.cc ../include/logger/parse/LiteralPatternConverter.h)
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}
