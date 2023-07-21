@@ -12,7 +12,6 @@
   oss_ << message;           \
   logger.Log(s21::diagnostic::LogLevel::Trace, __FILE__, __LINE__, __FUNCTION__, oss_.str()); }
 
-
 #define LOG_DEBUG(message) \
   {                        \
   std::stringstream oss_;  \

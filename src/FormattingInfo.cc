@@ -2,7 +2,7 @@
 // Created by Ludwig Andreas on 20.07.2023.
 //
 
-#include "FormattingInfo.h"
+#include "logger/parse/FormattingInfo.h"
 
 namespace s21::parse {
 

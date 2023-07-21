@@ -100,7 +100,8 @@ class Logger {
   }
 
   void ClearOutputStream() {
-    for (auto iter = output_streams_.begin(); iter != output_streams_.end(); iter = std::next(iter)) {
+    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
+         iter = std::next(iter)) {
       if (iter->owned)
         delete iter->p_stream;
     }
@@ -109,7 +110,8 @@ class Logger {
   void Log(LogLevel level, String file, int line, String func, String message) {
     threading_protection_.lock();
 
-    for (auto iter = output_streams_.begin(); iter != output_streams_.end(); iter = std::next(iter)) {
+    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
+         iter = std::next(iter)) {
       if (level < iter->level) {
         continue;
       }
@@ -119,7 +121,8 @@ class Logger {
       if (loggable_item_ & static_cast<int>(LogItem::DateTime))
         written = writeDatetime(written, p_stream);
       if (loggable_item_ & static_cast<int>(LogItem::ThreadId)) {
-        int thread_id = static_cast<int>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
+        int thread_id =
+            static_cast<int>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
         written = write < int > (thread_id, written, p_stream);
       }
       if (loggable_item_ & static_cast<int>(LogItem::LoggerName))
