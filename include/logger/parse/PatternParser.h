@@ -10,7 +10,7 @@
 
 #include "logger/Logger.h"
 #include "FormattingInfo.h"
-#include "PatternConverter.h"
+#include "logger/parse/converters/PatternConverter.h"
 
 namespace s21::parse {
 

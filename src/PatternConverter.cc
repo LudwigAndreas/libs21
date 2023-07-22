@@ -2,20 +2,21 @@
 // Created by Ludwig Andreas on 21.07.2023.
 //
 
-#include "logger/parse/PatternConverter.h"
+#include "logger/parse/converters/PatternConverter.h"
 
 #include <utility>
 
 
 namespace s21::parse {
-PatternConverter::PatternConverter(String name,
-                                               std::vector<String> options,
-                                               FormattingInfo formatting_info) :
+PatternConverter::PatternConverter(String &name,
+                                               std::vector<String> &options,
+                                               FormattingInfo
+                                               &formatting_info) :
     options_(std::move(options)),
     formatting_info_(formatting_info),
     name_(name) {}
 
-PatternConverter::~PatternConverter() {}
+PatternConverter::~PatternConverter() = default;
 
 void PatternConverter::setFormattingInfo(const FormattingInfo &formatting_info) {
   formatting_info_ = formatting_info;

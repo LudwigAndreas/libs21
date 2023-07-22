@@ -2,15 +2,11 @@
 // Created by Ludwig Andreas on 21.07.2023.
 //
 
-#include "logger/parse/LiteralPatternConverter.h"
+#include "logger/parse/converters/LiteralPatternConverter.h"
 
 #include <utility>
 #include "utils/logger.inc"
 namespace s21::parse {
-
-void LiteralPatternConverter::format(String &to_append_to) const {
-  to_append_to.append(this->name_);
-}
 
 LiteralPatternConverter *LiteralPatternConverter::newInstance(
     const String &literal) {
@@ -24,6 +20,11 @@ LiteralPatternConverter *LiteralPatternConverter::newInstance(
 
 LiteralPatternConverter::LiteralPatternConverter(const String &literal) {
   name_ = literal;
+}
+void LiteralPatternConverter::format(const LoggingEvent &event,
+                                     String &to_append_to) const {
+  (void) event;
+  to_append_to.append(this->name_);
 }
 
 }

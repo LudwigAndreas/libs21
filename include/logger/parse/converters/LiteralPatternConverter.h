@@ -12,7 +12,7 @@ class LiteralPatternConverter : public PatternConverter {
  public:
   explicit LiteralPatternConverter(const String &literal);
 
-  void format(String &to_append_to) const override;
+  void format(const LoggingEvent &event, String &to_append_to) const override;
 
   static LiteralPatternConverter *newInstance(const String &literal);
 };

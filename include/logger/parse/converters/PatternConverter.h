@@ -5,15 +5,11 @@
 #ifndef S21_INCLUDE_LOGGER_PARSER_PATTERNCONVERTER_H_
 #define S21_INCLUDE_LOGGER_PARSER_PATTERNCONVERTER_H_
 
-//struct test {
-//    std::func();
-//    std::vector<String> options;
-//    s21::parse::FormattingInfo info;
-//  };
-
 #include <vector>
-#include "FormattingInfo.h"
+
+#include "logger/parse/FormattingInfo.h"
 #include "logger/Logger.h"
+#include "logger/parse/LoggingEvent.h"
 
 namespace s21::parse {
 class PatternConverter {
@@ -25,12 +21,13 @@ class PatternConverter {
  public:
   PatternConverter() = default;
 
-  PatternConverter(String name, std::vector<String> options,
-                   FormattingInfo formatting_info);
+  PatternConverter(String &name, std::vector<String> &options,
+                   FormattingInfo &formatting_info);
 
   virtual ~PatternConverter();
 
-  virtual void format(String &to_append_to) const = 0;
+  virtual void format(const LoggingEvent &event,
+                      String &to_append_to) const = 0;
 
   void setFormattingInfo(const FormattingInfo &formatting_info);
 
