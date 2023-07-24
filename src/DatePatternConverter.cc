@@ -3,6 +3,8 @@
 //
 
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 #include "logger/parse/converters/PatternConverter.h"
 #include "logger/parse/converters/DatePatternConverter.h"
@@ -27,7 +29,7 @@ PatternConverter *DatePatternConverter::newInstance(std::vector<String> options)
   return new DatePatternConverter(options);
 }
 
-void DatePatternConverter::format(const LoggingEvent &event,
+void DatePatternConverter::format(const parse::LoggingEvent &event,
                                   String &to_append_to) const {
  (void) event;
  time_t time = std::time(nullptr);

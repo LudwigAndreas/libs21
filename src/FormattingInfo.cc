@@ -33,4 +33,18 @@ int FormattingInfo::getMaxLength() const {
 }
 FormattingInfo::FormattingInfo() : left_align_(false), min_length_(0),
 max_length_(INT_MAX) {}
+
+void FormattingInfo::format(const int field_start, String &buffer) const {
+  int raw_length = int(buffer.length() - field_start);
+  if (raw_length > max_length_) {
+    buffer.erase(buffer.begin() + field_start,
+                 buffer.begin() + field_start + (raw_length - max_length_));
+  } else if (raw_length < min_length_) {
+    if (left_align_) {
+      buffer.append(min_length_ - raw_length, ' ');
+    } else {
+      buffer.insert(field_start, min_length_ - raw_length, ' ');
+    }
+  }
+}
 }

@@ -5,7 +5,9 @@
 #ifndef S21_INCLUDE_LOGGER_PARSE_CONVERTERS_LOGGINGEVENT_H_
 #define S21_INCLUDE_LOGGER_PARSE_CONVERTERS_LOGGINGEVENT_H_
 
-#include "logger/Logger.h"
+#include <ctime>
+
+#include "logger/logger_type.h"
 
 namespace s21::parse {
 

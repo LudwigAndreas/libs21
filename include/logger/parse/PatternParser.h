@@ -9,7 +9,7 @@
 #include <vector>
 #include <functional>
 
-#include "logger/Logger.h"
+
 #include "FormattingInfo.h"
 #include "logger/parse/converters/PatternConverter.h"
 

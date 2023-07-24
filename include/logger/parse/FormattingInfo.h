@@ -5,6 +5,8 @@
 #ifndef S21_INCLUDE_LOGGER_PARSER_FORMATTINGINFO_H_
 #define S21_INCLUDE_LOGGER_PARSER_FORMATTINGINFO_H_
 
+#include "logger/logger_type.h"
+
 namespace s21::parse {
 class FormattingInfo {
  private:
@@ -19,13 +21,15 @@ class FormattingInfo {
 
   FormattingInfo(bool left_align, int min_length, int max_length);
 
+  void format(int field_start, String& buffer) const;
+
   static FormattingInfo getDefault();
 
-  [[nodiscard]] bool isLeftAligned() const;
+  bool isLeftAligned() const;
 
-  [[nodiscard]] int getMinLength() const;
+  int getMinLength() const;
 
-  [[nodiscard]] int getMaxLength() const;
+  int getMaxLength() const;
 };
 }
 

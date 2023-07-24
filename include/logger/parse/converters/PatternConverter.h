@@ -8,13 +8,13 @@
 #include <vector>
 
 #include "logger/parse/FormattingInfo.h"
-#include "logger/Logger.h"
 #include "logger/parse/LoggingEvent.h"
 
 namespace s21::parse {
 class PatternConverter {
  protected:
   std::vector<String> options_;
+
   String name_;
 
  public:

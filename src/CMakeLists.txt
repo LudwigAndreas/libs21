@@ -13,7 +13,7 @@ FILE (GLOB_RECURSE project_SRCS
     ../include/logger/LoggerInitializer.h
     ../include/logger/parse/PatternParser.h
     ../include/logger/parse/LoggingEvent.h
-    ../include/logger/parse/PatternLayout.h
+    ../include/logger/PatternLayout.h
     ../include/logger/parse/converters/PatternConverter.h
     ../include/logger/parse/converters/LiteralPatternConverter.h
     ../include/logger/parse/converters/LoggerPatternConverter.h
@@ -60,7 +60,7 @@ SET (project_MOC_HEADERS ../include)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS})
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS} PatternLayout.cc ../include/logger/logger_type.h)
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}

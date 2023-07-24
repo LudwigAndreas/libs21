@@ -24,6 +24,8 @@
 #include "logger/parse/converters/PropertiesPatternConverter.h"
 #include "logger/parse/FormattingInfo.h"
 
+#include "logger/logger_type.h"
+
 class PatternParserTest : public ::testing::Test {
  protected:
 
@@ -119,7 +121,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision) {
   std::vector<s21::parse::PatternConverter *> converters;
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map = get_format_specifiers();
-  String pattern = "[%d{yyyy-MM-dd HH:mm:ss}] %c %-5.10p - %m%n";
+  s21::String pattern = "[%d{yyyy-MM-dd HH:mm:ss}] %c %-5.10p - %m%n";
 
   s21::parse::PatternParser::parse(
       pattern,
@@ -192,7 +194,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision_2) {
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();
-  String pattern = "[%d] %c %-5p - %m%n";
+  s21::String pattern = "[%d] %c %-5p - %m%n";
 
   s21::parse::PatternParser::parse(
       pattern,
@@ -265,7 +267,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision_3) {
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();
-  String pattern = "%r %-5p %-20c %m%n";
+  s21::String pattern = "%r %-5p %-20c %m%n";
 
   s21::parse::PatternParser::parse(
       pattern,
@@ -332,7 +334,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision_4) {
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();
-  String pattern = "(%F:%C[%M]:%L) %m%n";
+  s21::String pattern = "(%F:%C[%M]:%L) %m%n";
 
   s21::parse::PatternParser::parse(
       pattern,
