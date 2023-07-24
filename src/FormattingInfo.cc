@@ -4,6 +4,8 @@
 
 #include "logger/parse/FormattingInfo.h"
 
+#include <climits>
+
 namespace s21::parse {
 
 FormattingInfo::FormattingInfo(const bool left_align,
@@ -14,7 +16,7 @@ FormattingInfo::FormattingInfo(const bool left_align,
     max_length_(max_length) {}
 
 FormattingInfo FormattingInfo::getDefault() {
-  static FormattingInfo def = FormattingInfo(false, 0, 2147483647);
+  static FormattingInfo def = FormattingInfo(false, 0, INT_MAX);
   return def;
 }
 
@@ -29,6 +31,6 @@ int FormattingInfo::getMinLength() const {
 int FormattingInfo::getMaxLength() const {
   return max_length_;
 }
-FormattingInfo::FormattingInfo() {}
-
+FormattingInfo::FormattingInfo() : left_align_(false), min_length_(0),
+max_length_(INT_MAX) {}
 }

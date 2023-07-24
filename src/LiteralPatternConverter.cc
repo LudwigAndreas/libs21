@@ -21,10 +21,18 @@ LiteralPatternConverter *LiteralPatternConverter::newInstance(
 LiteralPatternConverter::LiteralPatternConverter(const String &literal) {
   name_ = literal;
 }
+
 void LiteralPatternConverter::format(const LoggingEvent &event,
                                      String &to_append_to) const {
   (void) event;
   to_append_to.append(this->name_);
+}
+LiteralPatternConverter::LiteralPatternConverter(std::vector<String> &options)
+    : PatternConverter(options) {}
+
+PatternConverter *LiteralPatternConverter::newInstance(std::vector<String> options) {
+  (void) options;
+  return new LiteralPatternConverter("");
 }
 
 }

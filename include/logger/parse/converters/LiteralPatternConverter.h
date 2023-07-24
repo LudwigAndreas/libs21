@@ -10,9 +10,13 @@
 namespace s21::parse {
 class LiteralPatternConverter : public PatternConverter {
  public:
+
+  LiteralPatternConverter(std::vector<String> &options);
   explicit LiteralPatternConverter(const String &literal);
 
   void format(const LoggingEvent &event, String &to_append_to) const override;
+
+  static PatternConverter *newInstance(std::vector<String> options);
 
   static LiteralPatternConverter *newInstance(const String &literal);
 };

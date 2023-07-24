@@ -50,9 +50,7 @@ void PatternParser::parse(const String &pattern,
             if (!current_literal.empty()) {
               converters.push_back(LiteralPatternConverter::newInstance
                                        (current_literal));
-              converters.back()->setFormattingInfo(FormattingInfo::getDefault
-              ());
-//              formatting_infos.push_back(FormattingInfo::getDefault());
+              formatting_infos.push_back(FormattingInfo::getDefault());
               current_literal.erase(current_literal.begin(),
                                     current_literal.end());
             }
@@ -201,8 +199,7 @@ void PatternParser::parse(const String &pattern,
   if (current_literal.length() != 0) {
     converters.push_back(LiteralPatternConverter::newInstance
                              (current_literal));
-    converters.back()->setFormattingInfo(FormattingInfo::getDefault
-                                             ());
+    formatting_infos.push_back(FormattingInfo::getDefault());
   }
 }
 
@@ -245,8 +242,7 @@ PatternConverter *PatternParser::createConverter(
     const String &converter_id,
     String &current_literal,
     std::vector<String> &options,
-    const PatternMap &pattern_map,
-    const FormattingInfo &formatting_info
+    const PatternMap &pattern_map
 ) {
   String converter_name(converter_id);
   for (size_t i = converter_id.length(); i > 0; i--) {
@@ -257,12 +253,9 @@ PatternConverter *PatternParser::createConverter(
       current_literal.erase(current_literal.begin(),
                             current_literal.end() -
                                 (converter_id.length() - 1));
-      (iter->second)->setOptions(options);
-      (iter->second)->setFormattingInfo(formatting_info);
-      return (iter->second);
+      return (iter->second)(options);
     }
   }
-//  unrecognized format specifier
   return nullptr;
 }
 
@@ -272,7 +265,7 @@ size_t PatternParser::finalise(Char c,
                                String &current_literal,
                                const FormattingInfo &formatting_info,
                                std::vector<FormattingInfo> &formatting_infos,
-                               std::vector<PatternConverter *>&
+                               std::vector<PatternConverter *> &
                                converters,
                                const PatternMap &pattern_map) {
 
@@ -283,8 +276,7 @@ size_t PatternParser::finalise(Char c,
     // Empty conversion specifier
     converters.push_back(LiteralPatternConverter::newInstance
                              (current_literal));
-    converters.back()->setFormattingInfo(FormattingInfo::getDefault
-                                             ());
+    formatting_infos.push_back(FormattingInfo::getDefault());
   } else {
     String converter_id(convBuf);
 
@@ -293,16 +285,14 @@ size_t PatternParser::finalise(Char c,
 
     PatternConverter *pc(createConverter(converter_id,
                                          current_literal,
-                                         options, pattern_map,
-                                         formatting_info));
+                                         options, pattern_map));
     if (pc == nullptr) {
       // Unrecognized conversion specifier
 //      LOG_ERROR("Unrecognized conversion specifier: \"" << current_literal <<
 //                                                        "\"")
       converters.push_back(LiteralPatternConverter::newInstance
                                (current_literal));
-      converters.back()->setFormattingInfo(FormattingInfo::getDefault
-                                               ());
+      formatting_infos.push_back(FormattingInfo::getDefault());
     } else {
       converters.push_back(pc);
       formatting_infos.push_back(formatting_info);
@@ -310,8 +300,7 @@ size_t PatternParser::finalise(Char c,
       if (current_literal.length() > 0) {
         converters.push_back(LiteralPatternConverter::newInstance
                                  (current_literal));
-        converters.back()->setFormattingInfo(FormattingInfo::getDefault
-                                                 ());
+        formatting_infos.push_back(FormattingInfo::getDefault());
       }
     }
   }

@@ -8,9 +8,9 @@
 namespace s21::parse {
 class FormattingInfo {
  private:
-  bool left_align_;
-  int min_length_;
-  int max_length_;
+  bool left_align_{};
+  int min_length_{};
+  int max_length_{};
 
  public:
   FormattingInfo();
@@ -21,11 +21,11 @@ class FormattingInfo {
 
   static FormattingInfo getDefault();
 
-  bool isLeftAligned() const;
+  [[nodiscard]] bool isLeftAligned() const;
 
-  int getMinLength() const;
+  [[nodiscard]] int getMinLength() const;
 
-  int getMaxLength() const;
+  [[nodiscard]] int getMaxLength() const;
 };
 }
 

@@ -5,8 +5,17 @@
 #ifndef S21_INCLUDE_LOGGER_PARSE_CONVERTERS_CLASSNAMEPATTERNCONVERTER_H_
 #define S21_INCLUDE_LOGGER_PARSE_CONVERTERS_CLASSNAMEPATTERNCONVERTER_H_
 
-class ClassNamePatternConverter {
+#include "PatternConverter.h"
 
+namespace s21::parse {
+class ClassNamePatternConverter : public PatternConverter {
+ public:
+
+  ClassNamePatternConverter(std::vector<String> &options);
+
+  static PatternConverter *newInstance(std::vector<String> options);
+  void format(const LoggingEvent &event, String &to_append_to) const override;
 };
+}
 
 #endif //S21_INCLUDE_LOGGER_PARSE_CONVERTERS_CLASSNAMEPATTERNCONVERTER_H_

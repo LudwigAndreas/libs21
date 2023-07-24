@@ -15,29 +15,29 @@ namespace s21::parse {
 class PatternConverter {
  protected:
   std::vector<String> options_;
-  FormattingInfo formatting_info_;
   String name_;
 
  public:
   PatternConverter() = default;
 
-  PatternConverter(String &name, std::vector<String> &options,
-                   FormattingInfo &formatting_info);
+  PatternConverter(String &name, std::vector<String> &options);
+
+  PatternConverter(const std::vector<String> &options);
 
   virtual ~PatternConverter();
 
+//  virtual PatternConverter* newInstance(const std::vector<String>&
+//      options)
+//  = 0;
+
   virtual void format(const LoggingEvent &event,
                       String &to_append_to) const = 0;
-
-  void setFormattingInfo(const FormattingInfo &formatting_info);
 
   void setOptions(const std::vector<String> &options);
 
   void setName(const String &name);
 
   const std::vector<String> &getOptions() const;
-
-  const FormattingInfo getFormattingInfo() const;
 
   const String &getName() const;
 };

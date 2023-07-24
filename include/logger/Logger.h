@@ -15,6 +15,7 @@
 #include <sstream>
 
 #include "logger/logger-macros.h"
+#include "logger/LoggerInitializer.h"
 
 #define WRITELOG(logObj, level, message) { \
   std::stringstream oss_;                  \
@@ -73,7 +74,9 @@ class Logger {
              static_cast<int>(LogItem::DateTime) |
              static_cast<int>(LogItem::LoggerName) |
              static_cast<int>(LogItem::LogLevel))
-      : level_(level), name_(name), loggable_item_(loggableItems) {}
+      : level_(level), name_(name), loggable_item_(loggableItems) {
+    LoggerInitializer::GetInstance();
+  }
 
   ~Logger() {
 //    ClearOutputStream();

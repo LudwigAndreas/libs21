@@ -6,6 +6,52 @@ FILE (GLOB_RECURSE project_SRCS
     FormattingInfo.cc
     PatternParser.cc
     PropertiesReader.cc
+
+    ../include/logger/Logger.h
+    ../include/logger/LoggerThreading.h
+    ../include/logger/IThreading.h
+    ../include/logger/LoggerInitializer.h
+    ../include/logger/parse/PatternParser.h
+    ../include/logger/parse/LoggingEvent.h
+    ../include/logger/parse/PatternLayout.h
+    ../include/logger/parse/converters/PatternConverter.h
+    ../include/logger/parse/converters/LiteralPatternConverter.h
+    ../include/logger/parse/converters/LoggerPatternConverter.h
+    ../include/logger/parse/converters/ClassNamePatternConverter.h
+    ../include/logger/parse/converters/ColorStartPatternConverter.h
+    ../include/logger/parse/converters/ColorEndPatternConverter.h
+    ../include/logger/parse/converters/DatePatternConverter.h
+    ../include/logger/parse/converters/ShortFileLocationPatternConverter.h
+    ../include/logger/parse/converters/FileLocationPatternConverter.h
+    ../include/logger/parse/converters/FullLocationPatternConverter.h
+    ../include/logger/parse/converters/LineSeparatorPatternConverter.h
+    ../include/logger/parse/converters/MethodLocationPatternConverter.h
+    ../include/logger/parse/converters/LevelPatternConverter.h
+    ../include/logger/parse/converters/RelativeTimePatternConverter.h
+    ../include/logger/parse/converters/ThreadPatternConverter.h
+    ../include/logger/parse/converters/PropertiesPatternConverter.h
+    ../include/logger/parse/converters/LineLocationPatternConverter.h
+    ../include/logger/parse/converters/MessagePatternConverter.h
+    LineSeparatorPatternConverter.cc
+    MethodLocationPatternConverter.cc
+    LevelPatternConverter.cc
+    RelativeTimePatternConverter.cc
+    ThreadPatternConverter.cc
+    PropertiesPatternConverter.cc
+    LoggingEvent.cc
+    LoggerInitializer.cc
+    MessagePatternConverter.cc
+    PatternConverter.cc
+    LiteralPatternConverter.cc
+    LoggerPatternConverter.cc
+    ClassNamePatternConverter.cc
+    ColorStartPatternConverter.cc
+    ColorEndPatternConverter.cc
+    DatePatternConverter.cc
+    ShortFileLocationPatternConverter.cc
+    FileLocationPatternConverter.cc
+    FullLocationPatternConverter.cc
+    LineLocationPatternConverter.cc
     )
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
@@ -14,13 +60,7 @@ SET (project_MOC_HEADERS ../include)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS}
-    ../include/logger/Logger.h
-    ../include/logger/LoggerThreading.h
-    ../include/logger/IThreading.h
-    ../include/logger/parse/PatternParser.h
-    ../include/logger/parse/converters/PatternConverter.h
-    ../include/logger/parse/PatternLayout.h PatternConverter.cc LiteralPatternConverter.cc ../include/logger/parse/converters/LiteralPatternConverter.h ../include/logger/parse/converters/LoggerPatternConverter.cc ../include/logger/parse/converters/LoggerPatternConverter.h ../include/logger/parse/converters/ClassNamePatternConverter.cc ../include/logger/parse/converters/ClassNamePatternConverter.h ../include/logger/parse/converters/ColorStartPatternConverter.cc ../include/logger/parse/converters/ColorStartPatternConverter.h ../include/logger/parse/converters/ColorEndPatternConverter.cc ../include/logger/parse/converters/ColorEndPatternConverter.h ../include/logger/parse/converters/DatePatternConverter.cc ../include/logger/parse/converters/DatePatternConverter.h ../include/logger/parse/converters/ShortFileLocationPatternConverter.cc ../include/logger/parse/converters/ShortFileLocationPatternConverter.h ../include/logger/parse/converters/FileLocationPatternConverter.cc ../include/logger/parse/converters/FileLocationPatternConverter.h ../include/logger/parse/converters/FullLocationPatternConverter.cc ../include/logger/parse/converters/FullLocationPatternConverter.h ../include/logger/parse/converters/LineLocationPatternConverter.cc ../include/logger/parse/converters/LineLocationPatternConverter.h ../include/logger/parse/converters/MessagePatternConverter.cc ../include/logger/parse/converters/MessagePatternConverter.h ../include/logger/parse/converters/LineSeparatorPatternConverter.cc ../include/logger/parse/converters/LineSeparatorPatternConverter.h ../include/logger/parse/converters/MethodLocationPatternConverter.cc ../include/logger/parse/converters/MethodLocationPatternConverter.h ../include/logger/parse/converters/LevelPatternConverter.cc ../include/logger/parse/converters/LevelPatternConverter.h ../include/logger/parse/converters/RelativeTimePatternConverter.cc ../include/logger/parse/converters/RelativeTimePatternConverter.h ../include/logger/parse/converters/ThreadPatternConverter.cc ../include/logger/parse/converters/ThreadPatternConverter.h ../include/logger/parse/converters/PropertiesPatternConverter.cc ../include/logger/parse/converters/PropertiesPatternConverter.h ../include/logger/parse/LoggingEvent.cc ../include/logger/parse/LoggingEvent.h)
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS})
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}
