@@ -14,19 +14,12 @@
 #include <iomanip>
 #include <sstream>
 
-#include "logger/logger-macros.h"
+#include "logger/logger_macros.h"
 #include "logger/LoggerInitializer.h"
 #include "PatternLayout.h"
 
-#define WRITELOG(logObj, level, message) { \
-  std::stringstream oss_;                  \
-  oss_ << message;                         \
-  logObj.Log(level, __FILE__, __LINE__, __FUNCTION__, oss_.str()); }
-
 namespace s21::diagnostic {
 
-// template accepts an IThreading successor
-template<class ThreadingProtection>
 class Logger {
  private:
   struct StreamInfo {
@@ -41,86 +34,43 @@ class Logger {
   };
 
  public:
-  Logger(s21::diagnostic::LogLevel level,
-         String name,
+  Logger(const String& name = "Log4S21",
+         s21::diagnostic::LogLevel level = LogLevel::Trace,
          const s21::diagnostic::PatternLayout &
-         layout)
-      : level_(level), name_(name), pattern_layout_(layout) {
-    LoggerInitializer::GetInstance();
-  }
+         layout = PatternLayout());
 
-  Logger(s21::diagnostic::LogLevel level, String name)
-      : level_(level), name_(name) {
-    pattern_layout_ = PatternLayout("%6p %-8.10t --- [%M] %-25.40F : %m%n");
-    LoggerInitializer::GetInstance();
-  }
+  ~Logger();
 
-  ~Logger() {
-//    ClearOutputStream();
-  };
+  const String &GetName() const;
 
-  Logger(const Logger<ThreadingProtection> &other) = default;
-  Logger<ThreadingProtection> &operator=(const Logger<ThreadingProtection> &other) noexcept = default;
+  static Logger* getLogger(const String& name);
 
-  void AddOutputStream(ToStream &os, bool own, LogLevel level) {
-    AddOutputStream(&os, own, level);
-  }
+  static std::map<String, Logger*> GetLoggerRepo();
 
-  void AddOutputStream(ToStream &os, bool own) {
-    AddOutputStream(os, own, level_);
-  }
+  static Logger* getRootLogger();
 
-  void AddOutputStream(ToStream *os, bool own) {
-    AddOutputStream(os, own, level_);
-  }
+  void SetPatternLayout(const PatternLayout &pattern_layout);
 
-  void AddOutputStream(ToStream *os, bool own, LogLevel level) {
-    StreamInfo stream_info(*os, own, level);
-    output_streams_.push_back(stream_info);
-  }
+  void AddOutputStream(ToStream &os, bool own, LogLevel level);
 
-  void ClearOutputStream() {
-    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
-         iter = std::next(iter)) {
-      if (iter->owned)
-        delete iter->p_stream;
-    }
-  }
+  void AddOutputStream(ToStream &os, bool own);
 
-  void Log(LogLevel level, String file, int line, String func, String message) {
+  void AddOutputStream(ToStream *os, bool own);
 
-    String msg;
-    pattern_layout_.format(msg,
-                           {
-                               level,
-                               file,
-                               func,
-                               line,
-                               name_,
-                               message
-                           }
-    );
-    threading_protection_.lock();
-    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
-         iter = std::next(iter)) {
-      if (level < iter->level) {
-        continue;
-      }
-      ToStream *p_stream = &iter->p_stream;
-      if (!msg.empty()) {
-        (*p_stream) << msg;
-        p_stream->flush();
-      }
-    }
-    threading_protection_.unlock();
-  }
+  void AddOutputStream(ToStream *os, bool own, LogLevel level);
+
+  void ClearOutputStream();
+
+  void Log(LogLevel level, String file, int line, String func, String message);
 
  private:
+  static std::map<String, Logger*> logger_repo_;
+  static Logger* root;
   LogLevel level_;
   String name_;
   PatternLayout pattern_layout_;
   std::vector<StreamInfo> output_streams_;
-  ThreadingProtection threading_protection_;
+  std::mutex threading_protection_;
 };
 }
 

@@ -4,8 +4,6 @@
 
 #include "logger/parse/converters/LiteralPatternConverter.h"
 
-#include <utility>
-#include "utils/logger.inc"
 namespace s21::parse {
 
 LiteralPatternConverter *LiteralPatternConverter::newInstance(

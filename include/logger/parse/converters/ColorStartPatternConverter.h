@@ -17,7 +17,8 @@ class ColorStartPatternConverter : public PatternConverter {
   String debug_color_;
   String trace_color_;
  public:
-  ColorStartPatternConverter(std::vector<String>& options);
+  ColorStartPatternConverter();
+  ColorStartPatternConverter(std::vector<String> &options);
   static PatternConverter *newInstance(std::vector<String> options);
   void format(const LoggingEvent &event, String &to_append_to) const override;
   void SetFatalColor(const String &fatal_color);

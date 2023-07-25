@@ -36,6 +36,7 @@ max_length_(INT_MAX) {}
 
 void FormattingInfo::format(const int field_start, String &buffer) const {
   int raw_length = int(buffer.length() - field_start);
+
   if (raw_length > max_length_) {
     buffer.erase(buffer.begin() + field_start,
                  buffer.begin() + field_start + (raw_length - max_length_));

@@ -10,6 +10,7 @@ namespace s21::diagnostic {
 
 LoggerInitializer::LoggerInitializer() {
  time(&start_time_);
+ current_pid_ = getpid();
 }
 
 time_t LoggerInitializer::GetTime() {
@@ -19,6 +20,9 @@ time_t LoggerInitializer::GetTime() {
 LoggerInitializer &LoggerInitializer::GetInstance() {
   static LoggerInitializer init;
   return init;
+}
+pid_t LoggerInitializer::GetPid() {
+  return GetInstance().current_pid_;
 }
 
 }

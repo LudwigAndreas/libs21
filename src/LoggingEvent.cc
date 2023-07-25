@@ -4,9 +4,11 @@
 
 #include "logger/parse/LoggingEvent.h"
 
+#include <utility>
+#include <thread>
+
 #include "logger/LoggerInitializer.h"
 
-#include <utility>
 namespace s21::parse {
 
 s21::diagnostic::LogLevel LoggingEvent::GetLevel() const {
@@ -37,8 +39,17 @@ const String &LoggingEvent::GetShortFileName() const {
   return short_file_name_;
 }
 
-const String &LoggingEvent::GetThreadName() const {
+const String LoggingEvent::GetThreadName() const {
+  if (thread_name_.empty()) {
+    return std::to_string(static_cast<int>(std::hash<std::thread::id>{}
+        (std::this_thread::get_id())));
+  }
   return thread_name_;
+
+}
+
+int LoggingEvent::GetPid() {
+  return diagnostic::LoggerInitializer::GetPid();
 }
 
 time_t LoggingEvent::GetStartTime() {

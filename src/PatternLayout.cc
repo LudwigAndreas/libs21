@@ -18,6 +18,7 @@
 #include "logger/parse/converters/RelativeTimePatternConverter.h"
 #include "logger/parse/converters/ThreadPatternConverter.h"
 #include "logger/parse/converters/PropertiesPatternConverter.h"
+#include "logger/parse/converters/PidPatternConverter.h"
 #include "logger/PatternLayout.h"
 
 #include <utility>
@@ -73,9 +74,9 @@ void PatternLayout::activateOptions() {
       .end());
   pattern_fields_.erase(pattern_fields_.begin(), pattern_fields_.end());
   parse::PatternParser::parse(pat,
-                       pattern_converters_,
-                       pattern_fields_,
-                       getFormatSpecifiers());
+                              pattern_converters_,
+                              pattern_fields_,
+                              getFormatSpecifiers());
 }
 
 void PatternLayout::format(String &output, const parse::LoggingEvent &event) {
@@ -84,7 +85,7 @@ void PatternLayout::format(String &output, const parse::LoggingEvent &event) {
   for (auto converter_iter = pattern_converters_.begin();
        converter_iter != pattern_converters_.end();
        converter_iter++, formatter_iter++) {
-    int start_field = (int)output.length();
+    int start_field = (int) output.length();
     (*converter_iter)->format(event, output);
     (*formatter_iter).format(start_field, output);
   }
@@ -104,7 +105,7 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
                 s21::parse::ClassNamePatternConverter::newInstance});
 //
   specs.insert({"Y",
-                s21::parse::ColorStartPatternConverter::newInstance});
+                std::bind(&PatternLayout::createColorStartPatternConverter, this, std::placeholders::_1)});
   specs.insert({"y",
                 s21::parse::ColorEndPatternConverter::newInstance});
 //
@@ -147,6 +148,11 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
   specs.insert({"level",
                 s21::parse::LevelPatternConverter::newInstance});
 //
+  specs.insert({"P",
+                s21::parse::PidPatternConverter::newInstance});
+  specs.insert({"pid",
+                s21::parse::PidPatternConverter::newInstance});
+//
   specs.insert({"r",
                 s21::parse::RelativeTimePatternConverter::newInstance});
   specs.insert({"relative",
@@ -162,6 +168,22 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
   specs.insert({"properties",
                 s21::parse::PropertiesPatternConverter::newInstance});
   return specs;
+}
+
+s21::parse::PatternConverter* PatternLayout::createColorStartPatternConverter(
+    const std::vector<String> &options) {
+  (void ) options;
+  s21::parse::ColorStartPatternConverter *
+      color_pattern_converter = new parse::ColorStartPatternConverter();
+
+  color_pattern_converter->SetFatalColor(fatal_color_);
+  color_pattern_converter->SetErrorColor(error_color_);
+  color_pattern_converter->SetWarnColor(warn_color_);
+  color_pattern_converter->SetInfoColor(info_color_);
+  color_pattern_converter->SetDebugColor(debug_color_);
+  color_pattern_converter->SetTraceColor(trace_color_);
+
+  return color_pattern_converter;
 }
 
 }

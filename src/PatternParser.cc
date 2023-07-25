@@ -3,7 +3,6 @@
 //
 
 #include "logger/parse/PatternParser.h"
-#include "../test/utils/logger.inc"
 #include "logger/parse/converters/LiteralPatternConverter.h"
 
 #include <map>
@@ -155,10 +154,6 @@ void PatternParser::parse(const String &pattern,
 
           state = MAX_STATE;
         } else {
-
-//          LOG_ERROR(current_literal
-//                        << " handle error in pattern was expected a digit")
-
           state = LITERAL_STATE;
         }
         break;
@@ -168,7 +163,6 @@ void PatternParser::parse(const String &pattern,
         current_literal.append(1, c);
 
         if ((c >= 0x30 /* '0' */) && c <= 0x39 /* '9' */) {
-//          formatting_info = set maxLength to ((previous_value * 10) + (c - 0x30))
           formatting_info = FormattingInfo(formatting_info.isLeftAligned(),
                                            formatting_info.getMinLength(),
                                            formatting_info.getMaxLength() *
@@ -288,8 +282,6 @@ size_t PatternParser::finalise(Char c,
                                          options, pattern_map));
     if (pc == nullptr) {
       // Unrecognized conversion specifier
-//      LOG_ERROR("Unrecognized conversion specifier: \"" << current_literal <<
-//                                                        "\"")
       converters.push_back(LiteralPatternConverter::newInstance
                                (current_literal));
       formatting_infos.push_back(FormattingInfo::getDefault());

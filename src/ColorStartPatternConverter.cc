@@ -9,6 +9,10 @@
 
 namespace s21::parse {
 
+ColorStartPatternConverter::ColorStartPatternConverter() {
+  name_ = "Color start";
+}
+
 ColorStartPatternConverter::ColorStartPatternConverter(std::vector<String>&
 options) :
     PatternConverter(options){

@@ -41,7 +41,7 @@ class LoggingEvent {
 
   LoggingEvent();
 
-  const String &GetThreadName() const;
+  const String GetThreadName() const;
 
   const String getClassName() const;
 
@@ -58,6 +58,8 @@ class LoggingEvent {
   const String &getLoggerName() const;
 
   const String &getMessage() const;
+
+  static int GetPid();
 
   static time_t GetStartTime();
 

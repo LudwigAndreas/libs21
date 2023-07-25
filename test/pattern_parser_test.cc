@@ -1,10 +1,7 @@
 #include "test.h"
 
 #include <vector>
-#include <map>
-#include <fstream>
 
-#include "utils/logger.inc"
 #include "logger/parse/PatternParser.h"
 #include "logger/parse/converters/LoggerPatternConverter.h"
 #include "logger/parse/converters/ClassNamePatternConverter.h"
@@ -30,14 +27,10 @@ class PatternParserTest : public ::testing::Test {
  protected:
 
   void SetUp() override {
-//    logger_ = initLogger("tests.log", "tests");
-//    WRITELOG(logger_, s21::diagnostic::LogLevel::Trace, "Test set up");
   }
 
   void TearDown() override {
     // Code here will be called immediately after each test (right
-    // before the destructor).
-//    WRITELOG(logger_, s21::diagnostic::LogLevel::Trace, "Test tear down");
   }
 
   static s21::parse::PatternMap get_format_specifiers() {

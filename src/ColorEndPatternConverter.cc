@@ -26,7 +26,7 @@ PatternConverter *ColorEndPatternConverter::newInstance(
 void ColorEndPatternConverter::format(const LoggingEvent &event,
                                                   String &to_append_to) const {
   (void) event;
-  to_append_to.append("\\x1B[0m");
+  to_append_to.append("\x1B[0m");
 }
 
 }

@@ -23,25 +23,32 @@ class PatternLayout {
 
   std::vector<parse::FormattingInfo> pattern_fields_;
 
-  String fatal_color_ = "\\x1B[35m";
-  String error_color_ = "\\x1B[31m";
-  String warn_color_ = "\\x1B[33m";
-  String info_color_ = "\\x1B[32m";
-  String debug_color_ = "\\x1B[36m";
-  String trace_color_ = "\\x1B[34m";
+  String fatal_color_ = "\x1B[35m";
+  String error_color_ = "\x1B[31m";
+  String warn_color_ = "\x1B[33m";
+  String info_color_ = "\x1B[32m";
+  String debug_color_ = "\x1B[36m";
+  String trace_color_ = "\x1B[34m";
 
  protected:
 
   void activateOptions();
 
-  static s21::parse::PatternMap getFormatSpecifiers();
+  virtual s21::parse::PatternMap getFormatSpecifiers();
+
+  s21::parse::PatternConverter *createColorStartPatternConverter(const std::vector<
+      String> &options);
 
  public:
   PatternLayout();
 
+  PatternLayout(const PatternLayout& other) = default;
+
   PatternLayout(String pattern);
 
   ~PatternLayout();
+
+  PatternLayout& operator=(const PatternLayout& other) = default;
 
   void setConversionPattern(const String &conversion_pattern);
 
@@ -50,7 +57,7 @@ class PatternLayout {
   void setOption(const String &option, const String &value);
 
   void format(String &output,
-              const parse::LoggingEvent& event);
+              const parse::LoggingEvent &event);
 
 };
 }

@@ -32,6 +32,11 @@ FILE (GLOB_RECURSE project_SRCS
     ../include/logger/parse/converters/PropertiesPatternConverter.h
     ../include/logger/parse/converters/LineLocationPatternConverter.h
     ../include/logger/parse/converters/MessagePatternConverter.h
+    ../include/logger/parse/converters/PidPatternConverter.h
+    ../include/logger/logger_type.h
+    ../include/logger/LoggerConfigurator.h
+    PatternLayout.cc
+    PidPatternConverter.cc
     LineSeparatorPatternConverter.cc
     MethodLocationPatternConverter.cc
     LevelPatternConverter.cc
@@ -52,6 +57,7 @@ FILE (GLOB_RECURSE project_SRCS
     FileLocationPatternConverter.cc
     FullLocationPatternConverter.cc
     LineLocationPatternConverter.cc
+    LoggerConfigurator.cc
     )
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
@@ -60,7 +66,7 @@ SET (project_MOC_HEADERS ../include)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS} PatternLayout.cc ../include/logger/logger_type.h)
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS} Logger.cc)
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}

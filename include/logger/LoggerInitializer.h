@@ -6,6 +6,8 @@
 #define S21_INCLUDE_LOGGER_LOGGERINITIALIZER_H_
 
 #include <ctime>
+#include <unistd.h>
+#include <sys/types.h>
 
 namespace s21::diagnostic {
 class LoggerInitializer {
@@ -13,12 +15,16 @@ class LoggerInitializer {
 
   time_t start_time_;
 
+  pid_t current_pid_;
+
  public:
   LoggerInitializer();
 
   ~LoggerInitializer() = default;
 
   static time_t GetTime();
+
+  static pid_t GetPid();
 
   static LoggerInitializer &GetInstance();
 };
