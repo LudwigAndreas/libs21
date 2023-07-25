@@ -17,18 +17,18 @@ class PatternConverter {
 
   String name_;
 
- public:
   PatternConverter() = default;
 
   PatternConverter(String &name, std::vector<String> &options);
 
   PatternConverter(const std::vector<String> &options);
 
-  virtual ~PatternConverter();
+ public:
 
-//  virtual PatternConverter* newInstance(const std::vector<String>&
-//      options)
-//  = 0;
+  PatternConverter(const PatternConverter& other) = delete;
+
+  PatternConverter& operator=(const PatternConverter&) = delete;
+
 
   virtual void format(const LoggingEvent &event,
                       String &to_append_to) const = 0;
@@ -40,6 +40,7 @@ class PatternConverter {
   const std::vector<String> &getOptions() const;
 
   const String &getName() const;
+  virtual ~PatternConverter() = default;
 };
 }
 

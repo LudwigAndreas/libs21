@@ -35,8 +35,7 @@ class Logger {
  public:
   Logger(const String& name = "Log4S21",
          s21::diagnostic::LogLevel level = LogLevel::Trace,
-         const s21::diagnostic::PatternLayout &
-         layout = PatternLayout());
+         s21::diagnostic::PatternLayout&& layout = PatternLayout());
 
   ~Logger();
 
@@ -48,7 +47,7 @@ class Logger {
 
   static Logger* getRootLogger();
 
-  void SetPatternLayout(const PatternLayout &pattern_layout);
+  void SetPatternLayout(PatternLayout &&pattern_layout);
 
   void AddOutputStream(ToStream &os, bool own, LogLevel level);
 

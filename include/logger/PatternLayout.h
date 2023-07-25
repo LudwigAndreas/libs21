@@ -39,16 +39,24 @@ class PatternLayout {
   s21::parse::PatternConverter *createColorStartPatternConverter(const std::vector<
       String> &options);
 
+  PatternLayout(const PatternLayout& other) = default;
+
  public:
   PatternLayout();
 
-  PatternLayout(const PatternLayout& other) = default;
+  PatternLayout(PatternLayout&& other) = default;
 
   PatternLayout(String pattern);
 
   ~PatternLayout();
 
-  PatternLayout& operator=(const PatternLayout& other) = default;
+  PatternLayout& operator=(PatternLayout&& other) = default;
+
+  PatternLayout& operator=(const PatternLayout& other) = delete;
+
+  PatternLayout GetCopy();
+
+  const std::vector<parse::PatternConverter *> &GetPatternConverters() const;
 
   void setConversionPattern(const String &conversion_pattern);
 

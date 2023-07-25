@@ -9,7 +9,7 @@
 
 namespace s21::diagnostic {
 
-void LoggerConfigurator::configure(const PatternLayout &layout) {
+void LoggerConfigurator::configure(PatternLayout &&layout) {
 
   String layout_arg = layout.getConversionPattern();
   PatternLayout final_layout;
@@ -23,7 +23,7 @@ void LoggerConfigurator::configure(const PatternLayout &layout) {
   auto logger_repo = Logger::GetLoggerRepo();
   for (auto it = logger_repo.begin();
        it != logger_repo.end(); ++it) {
-    it->second->SetPatternLayout(final_layout);
+    it->second->SetPatternLayout(final_layout.GetCopy());
     it->second->AddOutputStream(std::cout, false);
   }
 }

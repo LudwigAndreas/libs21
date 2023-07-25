@@ -202,7 +202,7 @@ size_t PatternParser::extractOptions(const String &pattern,
                                      std::vector<String> &options) {
   while ((i < pattern.length()) && (pattern[i] == 0x7B /* '{' */)) {
     size_t end = pattern.find(0x7D, i);
-    if (end == String::npos) {
+    if (end == pattern.npos) {
       break;
     }
 
@@ -247,7 +247,7 @@ PatternConverter *PatternParser::createConverter(
       current_literal.erase(current_literal.begin(),
                             current_literal.end() -
                                 (converter_id.length() - 1));
-      return (iter->second)(options);
+      return ((iter->second)(options));
     }
   }
   return nullptr;

@@ -4,16 +4,11 @@
 
 #include "logger/parse/converters/PatternConverter.h"
 
-#include <utility>
-
-
 namespace s21::parse {
 PatternConverter::PatternConverter(String &name,
                                                std::vector<String> &options) :
-    options_(std::move(options)),
+    options_(options),
     name_(name) {}
-
-PatternConverter::~PatternConverter() = default;
 
 void PatternConverter::setOptions(const std::vector<String> &options) {
   options_ = options;

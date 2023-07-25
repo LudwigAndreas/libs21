@@ -12,6 +12,10 @@ PidPatternConverter::PidPatternConverter(std::vector<String> &options)
 }
 
 PatternConverter *PidPatternConverter::newInstance(std::vector<String> options) {
+  if (options.empty()) {
+    static PatternConverter* def = new PidPatternConverter(options);
+    return def;
+  }
   return new PidPatternConverter(options);
 }
 

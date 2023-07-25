@@ -35,8 +35,14 @@ PatternLayout::PatternLayout(String pattern) :
 }
 
 PatternLayout::~PatternLayout() {
-  pattern_converters_.erase(pattern_converters_.begin(), pattern_converters_
-      .end());
+  for (size_t i = 0; i < pattern_converters_.size(); ++i) {
+    delete pattern_converters_[i];
+  }
+//  pattern_converters_.clear();
+}
+
+PatternLayout PatternLayout::GetCopy() {
+  return *this;
 }
 
 void PatternLayout::setConversionPattern(const String &conversion_pattern) {
@@ -106,7 +112,9 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
                 s21::parse::ClassNamePatternConverter::newInstance});
 //
   specs.insert({"Y",
-                std::bind(&PatternLayout::createColorStartPatternConverter, this, std::placeholders::_1)});
+                std::bind(&PatternLayout::createColorStartPatternConverter,
+                          this,
+                          std::placeholders::_1)});
   specs.insert({"y",
                 s21::parse::ColorEndPatternConverter::newInstance});
 //
@@ -171,11 +179,10 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
   return specs;
 }
 
-s21::parse::PatternConverter* PatternLayout::createColorStartPatternConverter(
+s21::parse::PatternConverter *PatternLayout::createColorStartPatternConverter(
     const std::vector<String> &options) {
-  (void ) options;
-  s21::parse::ColorStartPatternConverter *
-      color_pattern_converter = new parse::ColorStartPatternConverter();
+  (void) options;
+  auto color_pattern_converter = new parse::ColorStartPatternConverter();
 
   color_pattern_converter->SetFatalColor(fatal_color_);
   color_pattern_converter->SetErrorColor(error_color_);
@@ -185,6 +192,9 @@ s21::parse::PatternConverter* PatternLayout::createColorStartPatternConverter(
   color_pattern_converter->SetTraceColor(trace_color_);
 
   return color_pattern_converter;
+}
+const std::vector<parse::PatternConverter *> &PatternLayout::GetPatternConverters() const {
+  return pattern_converters_;
 }
 
 }

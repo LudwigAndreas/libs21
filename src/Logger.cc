@@ -14,8 +14,8 @@ Logger::StreamInfo::StreamInfo(ToStream &p_stream, bool owned, LogLevel level)  
     level(level) {}
 
 Logger::Logger(const String& name, LogLevel level,
-               const PatternLayout& layout)
-    : level_(level), name_(name), pattern_layout_(layout) {
+               PatternLayout&& layout)
+    : level_(level), name_(name), pattern_layout_(std::move(layout)) {
   LoggerInitializer::GetInstance();
   if (!root)
     root = this;
@@ -46,8 +46,8 @@ Logger *Logger::getRootLogger() {
   return root;
 }
 
-void Logger::SetPatternLayout(const PatternLayout &pattern_layout) {
-  pattern_layout_ = pattern_layout;
+void Logger::SetPatternLayout(PatternLayout &&pattern_layout) {
+  pattern_layout_ = std::move(pattern_layout);
 }
 
 void Logger::AddOutputStream(ToStream &os, bool own, LogLevel level) {

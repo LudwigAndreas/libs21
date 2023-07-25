@@ -15,7 +15,8 @@ namespace s21::diagnostic {
 class LoggerConfigurator {
 
  public:
-  static void configure(const PatternLayout &layout = PatternLayout());
+
+  static void configure(PatternLayout &&layout = PatternLayout());
 
 };
 
