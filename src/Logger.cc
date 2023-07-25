@@ -24,6 +24,12 @@ Logger::Logger(const String& name, LogLevel level,
 
 
 Logger::~Logger() {
+  // for (auto it = logger_repo_.begin(); it != logger_repo_.end(); ++it) {
+  //   if (it->second == this)
+  //     delete
+
+  // }
+  delete logger_repo_.at(name_);
   logger_repo_.erase(name_);
   ClearOutputStream();
 }

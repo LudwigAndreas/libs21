@@ -35,9 +35,9 @@ PatternLayout::PatternLayout(String pattern) :
 }
 
 PatternLayout::~PatternLayout() {
-  for (size_t i = 0; i < pattern_converters_.size(); ++i) {
-    delete pattern_converters_[i];
-  }
+  // for (size_t i = 0; i < pattern_converters_.size(); ++i) {
+  //   delete pattern_converters_[i];
+  // }
 //  pattern_converters_.clear();
 }
 
@@ -157,10 +157,10 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
   specs.insert({"level",
                 s21::parse::LevelPatternConverter::newInstance});
 //
-  specs.insert({"P",
-                s21::parse::PidPatternConverter::newInstance});
-  specs.insert({"pid",
-                s21::parse::PidPatternConverter::newInstance});
+  // specs.insert({"P",
+  //               s21::parse::PidPatternConverter::newInstance});
+  // specs.insert({"pid",
+  //               s21::parse::PidPatternConverter::newInstance});
 //
   specs.insert({"r",
                 s21::parse::RelativeTimePatternConverter::newInstance});
@@ -179,10 +179,10 @@ s21::parse::PatternMap PatternLayout::getFormatSpecifiers() {
   return specs;
 }
 
-s21::parse::PatternConverter *PatternLayout::createColorStartPatternConverter(
+std::shared_ptr<s21::parse::PatternConverter> PatternLayout::createColorStartPatternConverter(
     const std::vector<String> &options) {
   (void) options;
-  auto color_pattern_converter = new parse::ColorStartPatternConverter();
+  auto color_pattern_converter = std::make_shared<parse::ColorStartPatternConverter>();
 
   color_pattern_converter->SetFatalColor(fatal_color_);
   color_pattern_converter->SetErrorColor(error_color_);
@@ -193,7 +193,7 @@ s21::parse::PatternConverter *PatternLayout::createColorStartPatternConverter(
 
   return color_pattern_converter;
 }
-const std::vector<parse::PatternConverter *> &PatternLayout::GetPatternConverters() const {
+const std::vector<std::shared_ptr<parse::PatternConverter> > &PatternLayout::GetPatternConverters() const {
   return pattern_converters_;
 }
 

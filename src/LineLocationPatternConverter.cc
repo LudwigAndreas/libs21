@@ -11,12 +11,12 @@ LineLocationPatternConverter::LineLocationPatternConverter(std::vector<
   name_ = "Line";
 }
 
-PatternConverter *LineLocationPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> LineLocationPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new LineLocationPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<LineLocationPatternConverter>(options);
     return def;
   }
-  return new LineLocationPatternConverter(options);
+  return std::make_shared<LineLocationPatternConverter>(options);
 }
 
 void LineLocationPatternConverter::format(const LoggingEvent &event,

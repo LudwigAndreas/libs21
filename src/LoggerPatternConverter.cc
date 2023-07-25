@@ -11,13 +11,13 @@ LoggerPatternConverter::LoggerPatternConverter(const std::vector<String>
   name_ = "Logger name";
 }
 
-PatternConverter *LoggerPatternConverter::newInstance(const std::vector<String>&
+std::shared_ptr<PatternConverter> LoggerPatternConverter::newInstance(const std::vector<String>&
     options) {
   if (options.empty()) {
-    static PatternConverter* def = new LoggerPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<LoggerPatternConverter>(options);
     return def;
   }
-  return new LoggerPatternConverter(options);
+  return std::make_shared<LoggerPatternConverter>(options);
 }
 
 void LoggerPatternConverter::format(const LoggingEvent &event,

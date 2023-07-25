@@ -15,12 +15,12 @@ FileLocationPatternConverter::FileLocationPatternConverter(std::vector<
   name_ = "File location";
 }
 
-PatternConverter *FileLocationPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> FileLocationPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new FileLocationPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<FileLocationPatternConverter>(options);
     return def;
   }
-  return new FileLocationPatternConverter(options);
+  return std::make_shared<FileLocationPatternConverter>(options);
 }
 
 void FileLocationPatternConverter::format(const LoggingEvent &event,

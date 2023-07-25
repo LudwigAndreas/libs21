@@ -11,12 +11,12 @@ MessagePatternConverter::MessagePatternConverter(std::vector<String> &options)
   name_ = "Message";
 }
 
-PatternConverter *MessagePatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> MessagePatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new MessagePatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<MessagePatternConverter>(options);
     return def;
   }
-  return new MessagePatternConverter(options);
+  return std::make_shared<MessagePatternConverter>(options);
 }
 
 void MessagePatternConverter::format(const LoggingEvent &event,

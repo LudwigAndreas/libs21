@@ -11,12 +11,12 @@ s21::parse::MethodLocationPatternConverter::MethodLocationPatternConverter(std::
   name_ = "Method location";
 }
 
-PatternConverter *MethodLocationPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> MethodLocationPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new MethodLocationPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<MethodLocationPatternConverter>(options);
     return def;
   }
-  return new MethodLocationPatternConverter(options);
+  return std::make_shared<MethodLocationPatternConverter>(options);
 }
 
 void MethodLocationPatternConverter::format(const LoggingEvent &event,

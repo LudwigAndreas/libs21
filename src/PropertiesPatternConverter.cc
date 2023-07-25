@@ -11,12 +11,12 @@ s21::parse::PropertiesPatternConverter::PropertiesPatternConverter(std::vector<
   name_ = "Properties";
 }
 
-PatternConverter *PropertiesPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> PropertiesPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new PropertiesPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<PropertiesPatternConverter>(options);
     return def;
   }
-  return new PropertiesPatternConverter(options);
+  return std::make_shared<PropertiesPatternConverter>(options);
 }
 
 void PropertiesPatternConverter::format(const LoggingEvent &event,

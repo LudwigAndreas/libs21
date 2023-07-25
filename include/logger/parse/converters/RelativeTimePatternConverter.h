@@ -11,7 +11,7 @@ namespace s21::parse {
 class RelativeTimePatternConverter : public PatternConverter {
  public:
   RelativeTimePatternConverter(std::vector<String> &options);
-  static PatternConverter *newInstance(std::vector<String> options);
+  static std::shared_ptr<PatternConverter>newInstance(std::vector<String> options);
   void format(const LoggingEvent &event, String &to_append_to) const override;
 };
 }

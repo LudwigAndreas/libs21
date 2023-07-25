@@ -11,12 +11,12 @@ PidPatternConverter::PidPatternConverter(std::vector<String> &options)
   name_ = "Pid";
 }
 
-PatternConverter *PidPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> PidPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new PidPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<PatternConverter>(options);
     return def;
   }
-  return new PidPatternConverter(options);
+  return std::make_shared<PatternConverter>(options);
 }
 
 void PidPatternConverter::format(const LoggingEvent &event,

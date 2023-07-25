@@ -6,6 +6,7 @@
 #define S21_INCLUDE_LOGGER_PARSER_PATTERNCONVERTER_H_
 
 #include <vector>
+#include <memory>
 
 #include "logger/parse/FormattingInfo.h"
 #include "logger/parse/LoggingEvent.h"

@@ -11,7 +11,7 @@ namespace s21::parse {
 class LoggerPatternConverter : public PatternConverter {
  public:
   LoggerPatternConverter(const std::vector<String> &options);
-  static PatternConverter *newInstance(const std::vector<String>& options);
+  static std::shared_ptr<PatternConverter>newInstance(const std::vector<String>& options);
   void format(const LoggingEvent &event, String &to_append_to) const override;
 };
 }

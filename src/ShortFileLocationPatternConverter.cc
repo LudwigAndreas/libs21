@@ -10,13 +10,13 @@ ShortFileLocationPatternConverter::ShortFileLocationPatternConverter(
   name_ = "Short file location";
 }
 
-PatternConverter *ShortFileLocationPatternConverter::newInstance(std::vector<
+std::shared_ptr<PatternConverter> ShortFileLocationPatternConverter::newInstance(std::vector<
     String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new ShortFileLocationPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<ShortFileLocationPatternConverter>(options);
     return def;
   }
-  return new ShortFileLocationPatternConverter(options);
+  return std::make_shared<ShortFileLocationPatternConverter>(options);
 }
 
 void ShortFileLocationPatternConverter::format(const LoggingEvent &event,

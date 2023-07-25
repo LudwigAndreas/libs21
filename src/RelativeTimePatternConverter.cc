@@ -10,12 +10,12 @@ RelativeTimePatternConverter::RelativeTimePatternConverter(std::vector<
   name_ = "Relative time";
 }
 
-PatternConverter *RelativeTimePatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> RelativeTimePatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new RelativeTimePatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<RelativeTimePatternConverter>(options);
     return def;
   }
-  return new RelativeTimePatternConverter(options);
+  return std::make_shared<RelativeTimePatternConverter>(options);
 }
 
 void RelativeTimePatternConverter::format(const LoggingEvent &event,

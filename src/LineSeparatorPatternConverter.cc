@@ -17,12 +17,12 @@ LineSeparatorPatternConverter::LineSeparatorPatternConverter(std::vector<
   name_ = "Line separator";
 }
 
-PatternConverter *LineSeparatorPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> LineSeparatorPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new LineSeparatorPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<LineSeparatorPatternConverter>(options);
     return def;
   }
-  return new LineSeparatorPatternConverter(options);
+  return std::make_shared<LineSeparatorPatternConverter>(options);
 }
 
 void LineSeparatorPatternConverter::format(const LoggingEvent &event,

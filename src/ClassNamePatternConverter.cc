@@ -6,13 +6,13 @@
 #include <logger/parse/converters/ClassNamePatternConverter.h>
 
 namespace s21::parse {
-PatternConverter *ClassNamePatternConverter::newInstance(
+std::shared_ptr<PatternConverter> ClassNamePatternConverter::newInstance(
     std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter *def = new ClassNamePatternConverter(options);
+    static std::shared_ptr<PatternConverter>  def = std::make_shared<ClassNamePatternConverter>(options);
     return def;
   }
-  return new ClassNamePatternConverter(options);
+  return std::make_shared<ClassNamePatternConverter>(options);
 }
 ClassNamePatternConverter::ClassNamePatternConverter(std::vector<
     String> &options) : PatternConverter(options) {

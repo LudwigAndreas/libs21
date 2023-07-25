@@ -38,12 +38,12 @@ void ColorStartPatternConverter::SetTraceColor(const String &trace_color) {
   trace_color_ = trace_color;
 }
 
-PatternConverter *ColorStartPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> ColorStartPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new ColorStartPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<ColorStartPatternConverter>(options);
     return def;
   }
-  return new ColorStartPatternConverter(options);
+  return std::make_shared<ColorStartPatternConverter>(options);
 }
 
 void ColorStartPatternConverter::format(const LoggingEvent &event,

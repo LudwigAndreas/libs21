@@ -6,6 +6,7 @@
 #define S21_SRC_PATTERNPARSER_H_
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <functional>
 
@@ -15,7 +16,7 @@
 
 namespace s21::parse {
 
-typedef std::function<PatternConverter*(const std::vector<String>& options)>
+typedef std::function<std::shared_ptr<PatternConverter>(const std::vector<String>& options)>
     PatternConstructor;
 typedef std::map<String, PatternConstructor> PatternMap;
 
@@ -50,10 +51,10 @@ class PatternParser {
                          String &current_literal,
                          const FormattingInfo &formatting_info,
                          std::vector<FormattingInfo>& formatting_infos,
-                         std::vector<PatternConverter *>& converters,
+                         std::vector<std::shared_ptr<PatternConverter>>& converters,
                          const PatternMap& pattern_map);
 
-  static PatternConverter* createConverter(
+  static std::shared_ptr<PatternConverter> createConverter(
       const String& converter_id,
       String& current_literal,
       std::vector<String>& options,
@@ -62,7 +63,7 @@ class PatternParser {
 
  public:
   static void parse(const String &pattern,
-             std::vector<PatternConverter *> &converters,
+             std::vector<std::shared_ptr<PatternConverter>> &converters,
              std::vector<FormattingInfo> &formatting_infos,
              const PatternMap &pattern_map);
 };

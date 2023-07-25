@@ -10,8 +10,8 @@ ThreadPatternConverter::ThreadPatternConverter(std::vector<String> &options)
   name_ = "Thread name";
 }
 
-PatternConverter *ThreadPatternConverter::newInstance(std::vector<String> options) {
-  return new ThreadPatternConverter(options);
+std::shared_ptr<PatternConverter> ThreadPatternConverter::newInstance(std::vector<String> options) {
+  return std::make_shared<ThreadPatternConverter>(options);
 }
 
 void ThreadPatternConverter::format(const LoggingEvent &event,

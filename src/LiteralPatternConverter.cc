@@ -6,14 +6,14 @@
 
 namespace s21::parse {
 
-LiteralPatternConverter *LiteralPatternConverter::newInstance(
+std::shared_ptr<PatternConverter> LiteralPatternConverter::newInstance(
     const String &literal) {
   if (literal.length() == 1 && literal[0] == 0x20 /* ' ' */) {
-    static auto *blank = new LiteralPatternConverter
+    static std::shared_ptr<LiteralPatternConverter> blank = std::make_shared<LiteralPatternConverter>
         (literal);
     return blank;
   }
-  return new LiteralPatternConverter(literal);
+  return std::make_shared<LiteralPatternConverter>(literal);
 }
 
 LiteralPatternConverter::LiteralPatternConverter(const String &literal) {
@@ -28,9 +28,9 @@ void LiteralPatternConverter::format(const LoggingEvent &event,
 LiteralPatternConverter::LiteralPatternConverter(std::vector<String> &options)
     : PatternConverter(options) {}
 
-PatternConverter *LiteralPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> LiteralPatternConverter::newInstance(std::vector<String> options) {
   (void) options;
-  return new LiteralPatternConverter("");
+  return std::make_shared<LiteralPatternConverter>("");
 }
 
 }

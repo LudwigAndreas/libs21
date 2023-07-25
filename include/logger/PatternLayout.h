@@ -6,6 +6,7 @@
 #define S21_INCLUDE_LOGGER_PARSER_PATTERNLAYOUT_H_
 
 #include <map>
+#include <memory>
 
 #include "logger/parse/LoggingEvent.h"
 #include "logger/parse/PatternParser.h"
@@ -19,7 +20,7 @@ class PatternLayout {
 
   String conversion_pattern_;
 
-  std::vector<parse::PatternConverter *> pattern_converters_;
+  std::vector<std::shared_ptr<parse::PatternConverter>> pattern_converters_;
 
   std::vector<parse::FormattingInfo> pattern_fields_;
 
@@ -36,7 +37,7 @@ class PatternLayout {
 
   virtual s21::parse::PatternMap getFormatSpecifiers();
 
-  s21::parse::PatternConverter *createColorStartPatternConverter(const std::vector<
+  std::shared_ptr<s21::parse::PatternConverter>createColorStartPatternConverter(const std::vector<
       String> &options);
 
   PatternLayout(const PatternLayout& other) = default;
@@ -56,7 +57,7 @@ class PatternLayout {
 
   PatternLayout GetCopy();
 
-  const std::vector<parse::PatternConverter *> &GetPatternConverters() const;
+  const std::vector<std::shared_ptr<parse::PatternConverter>> &GetPatternConverters() const;
 
   void setConversionPattern(const String &conversion_pattern);
 

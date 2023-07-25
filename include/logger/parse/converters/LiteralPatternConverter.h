@@ -16,9 +16,9 @@ class LiteralPatternConverter : public PatternConverter {
 
   void format(const LoggingEvent &event, String &to_append_to) const override;
 
-  static PatternConverter *newInstance(std::vector<String> options);
+  static std::shared_ptr<PatternConverter> newInstance(std::vector<String> options);
 
-  static LiteralPatternConverter *newInstance(const String &literal);
+  static std::shared_ptr<PatternConverter> newInstance(const String &literal);
 };
 }
 

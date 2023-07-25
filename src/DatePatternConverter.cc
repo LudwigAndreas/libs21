@@ -16,12 +16,12 @@ DatePatternConverter::DatePatternConverter(std::vector<String> &options)
   name_ = "Date time";
 }
 
-PatternConverter *DatePatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> DatePatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new DatePatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<DatePatternConverter>(options);
     return def;
   }
-  return new DatePatternConverter(options);
+  return std::make_shared<DatePatternConverter>(options);
 }
 
 void DatePatternConverter::format(const parse::LoggingEvent &event,

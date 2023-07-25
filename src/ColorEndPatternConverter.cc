@@ -14,13 +14,13 @@ ColorEndPatternConverter::ColorEndPatternConverter(std::vector<
   name_ = "Color End";
 }
 
-PatternConverter *ColorEndPatternConverter::newInstance(
+std::shared_ptr<PatternConverter> ColorEndPatternConverter::newInstance(
     std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new ColorEndPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<ColorEndPatternConverter>(options);
     return def;
   }
-  return new ColorEndPatternConverter(options);
+  return std::make_shared<ColorEndPatternConverter>(options);
 }
 
 void ColorEndPatternConverter::format(const LoggingEvent &event,

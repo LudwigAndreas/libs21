@@ -15,12 +15,12 @@ FullLocationPatternConverter::FullLocationPatternConverter(std::vector<
   name_ = "Full file location";
 }
 
-PatternConverter *FullLocationPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> FullLocationPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new FullLocationPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<FullLocationPatternConverter>(options);
     return def;
   }
-  return new FullLocationPatternConverter(options);
+  return std::make_shared<FullLocationPatternConverter>(options);
 }
 
 void FullLocationPatternConverter::format(const LoggingEvent &event,

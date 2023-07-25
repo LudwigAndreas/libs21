@@ -10,12 +10,12 @@ LevelPatternConverter::LevelPatternConverter(std::vector<String> &options)
   name_ = "Level";
 }
 
-PatternConverter *LevelPatternConverter::newInstance(std::vector<String> options) {
+std::shared_ptr<PatternConverter> LevelPatternConverter::newInstance(std::vector<String> options) {
   if (options.empty()) {
-    static PatternConverter* def = new LevelPatternConverter(options);
+    static std::shared_ptr<PatternConverter> def = std::make_shared<LevelPatternConverter>(options);
     return def;
   }
-  return new LevelPatternConverter(options);
+  return std::make_shared<LevelPatternConverter>(options);
 }
 
 void LevelPatternConverter::format(const LoggingEvent &event,

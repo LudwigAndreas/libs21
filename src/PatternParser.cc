@@ -19,7 +19,7 @@ bool PatternParser::isUnicodeIdentifier(Char ch) {
 }
 
 void PatternParser::parse(const String &pattern,
-                          std::vector<PatternConverter *> &converters,
+                          std::vector<std::shared_ptr<PatternConverter> > &converters,
                           std::vector<FormattingInfo> &formatting_infos,
                           const PatternMap &pattern_map) {
 
@@ -232,7 +232,7 @@ size_t PatternParser::extractConverter(
   return i;
 }
 
-PatternConverter *PatternParser::createConverter(
+std::shared_ptr<PatternConverter> PatternParser::createConverter(
     const String &converter_id,
     String &current_literal,
     std::vector<String> &options,
@@ -259,7 +259,7 @@ size_t PatternParser::finalise(Char c,
                                String &current_literal,
                                const FormattingInfo &formatting_info,
                                std::vector<FormattingInfo> &formatting_infos,
-                               std::vector<PatternConverter *> &
+                               std::vector<std::shared_ptr<PatternConverter> > &
                                converters,
                                const PatternMap &pattern_map) {
 
@@ -277,7 +277,7 @@ size_t PatternParser::finalise(Char c,
     std::vector<String> options;
     i = extractOptions(pattern, i, options);
 
-    PatternConverter *pc(createConverter(converter_id,
+    std::shared_ptr<PatternConverter> pc(createConverter(converter_id,
                                          current_literal,
                                          options, pattern_map));
     if (pc == nullptr) {

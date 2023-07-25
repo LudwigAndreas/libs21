@@ -23,7 +23,10 @@ void LoggerConfigurator::configure(PatternLayout &&layout) {
   auto logger_repo = Logger::GetLoggerRepo();
   for (auto it = logger_repo.begin();
        it != logger_repo.end(); ++it) {
-    it->second->SetPatternLayout(final_layout.GetCopy());
+    if (std::next(it) == logger_repo.end())
+      it->second->SetPatternLayout(std::move(final_layout));
+    else
+      it->second->SetPatternLayout(final_layout.GetCopy());
     it->second->AddOutputStream(std::cout, false);
   }
 }
