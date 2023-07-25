@@ -1,6 +1,7 @@
 #include "test.h"
 
 #include <vector>
+#include <climits>
 
 #include "logger/parse/PatternParser.h"
 #include "logger/parse/converters/LoggerPatternConverter.h"

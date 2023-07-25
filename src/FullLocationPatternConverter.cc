@@ -9,7 +9,7 @@
 
 namespace s21::parse {
 
-FullLocationPatternConverter::FullLocationPatternConverter(std::__1::vector<
+FullLocationPatternConverter::FullLocationPatternConverter(std::vector<
     String> &options)
     : PatternConverter(options) {
   name_ = "Full file location";

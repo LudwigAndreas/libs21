@@ -13,6 +13,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <mutex>
 
 #include "logger/logger_macros.h"
 #include "logger/LoggerInitializer.h"
