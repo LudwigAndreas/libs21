@@ -35,7 +35,8 @@ PatternLayout::PatternLayout(String pattern) :
 }
 
 PatternLayout::~PatternLayout() {
-
+  pattern_converters_.erase(pattern_converters_.begin(), pattern_converters_
+      .end());
 }
 
 void PatternLayout::setConversionPattern(const String &conversion_pattern) {

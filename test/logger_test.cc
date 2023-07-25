@@ -72,4 +72,5 @@ TEST(LoggerTest, new_logger_creation) {
   LOG_WARN(logger, "Some Warn message 6");
   LOG_ERROR(logger, "Some Error message 6");
   LOG_FATAL(logger, "Some Fatal message 6");
+  s21::diagnostic::Logger::GetLoggerRepo().clear();
 }
