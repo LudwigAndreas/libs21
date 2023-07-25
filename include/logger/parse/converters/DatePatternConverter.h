@@ -9,8 +9,6 @@
 
 namespace s21::parse {
 class DatePatternConverter : public PatternConverter {
- private:
-  String date_time_format;
  public:
   DatePatternConverter(std::vector<String> &options);
 

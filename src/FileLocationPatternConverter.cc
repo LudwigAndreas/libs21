@@ -9,7 +9,7 @@
 
 namespace s21::parse {
 
-FileLocationPatternConverter::FileLocationPatternConverter(std::__1::vector<
+FileLocationPatternConverter::FileLocationPatternConverter(std::vector<
     String> &options)
     : PatternConverter(options) {
   name_ = "File location";

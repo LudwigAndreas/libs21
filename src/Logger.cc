@@ -6,7 +6,12 @@
 namespace s21::diagnostic {
 
 std::map<String, Logger*> Logger::logger_repo_;
-Logger* Logger::root;
+Logger* Logger::root = nullptr;
+
+Logger::StreamInfo::StreamInfo(ToStream &p_stream, bool owned, LogLevel level)  :
+    p_stream(p_stream),
+    owned(owned),
+    level(level) {}
 
 Logger::Logger(const String& name, LogLevel level,
                const PatternLayout& layout)
@@ -20,6 +25,7 @@ Logger::Logger(const String& name, LogLevel level,
 
 Logger::~Logger() {
   logger_repo_.erase(name_);
+  ClearOutputStream();
 }
 
 const String &Logger::GetName() const {
@@ -62,11 +68,11 @@ void Logger::AddOutputStream(ToStream *os, bool own, LogLevel level)  {
 }
 
 void Logger::ClearOutputStream() {
-//    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
-//         iter = std::next(iter)) {
-//      if (iter->owned)
-//        delete iter->p_stream;
-//    }
+    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
+         iter = std::next(iter)) {
+      if (iter->owned)
+        delete &iter->p_stream;
+    }
 }
 
 void Logger::Log(LogLevel level,

@@ -14,11 +14,6 @@ namespace s21::parse {
 DatePatternConverter::DatePatternConverter(std::vector<String> &options)
     : PatternConverter(options) {
   name_ = "Date time";
-  if (options.empty()) {
-    date_time_format = "%Y/%m/%d.%X";
-  } else {
-    date_time_format = options[0];
-  }
 }
 
 PatternConverter *DatePatternConverter::newInstance(std::vector<String> options) {

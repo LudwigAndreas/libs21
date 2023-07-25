@@ -27,10 +27,8 @@ class Logger {
     bool owned;
     LogLevel level;
 
-    StreamInfo(ToStream &p_stream, bool owned, LogLevel level) :
-        p_stream(p_stream),
-        owned(owned),
-        level(level) {}
+    StreamInfo(ToStream &p_stream, bool owned, LogLevel level);
+
   };
 
  public:
