@@ -112,7 +112,7 @@ class PatternParserTest : public ::testing::Test {
 
 TEST_F(PatternParserTest, basic_pattern_recognision) {
 
-  std::vector<s21::parse::PatternConverter *> converters;
+  std::vector<std::shared_ptr<s21::parse::PatternConverter>> converters;
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map = get_format_specifiers();
   s21::String pattern = "[%d{yyyy-MM-dd HH:mm:ss}] %c %-5.10p - %m%n";
@@ -184,7 +184,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision) {
 
 TEST_F(PatternParserTest, basic_pattern_recognision_2) {
 
-  std::vector<s21::parse::PatternConverter *> converters;
+  std::vector<std::shared_ptr<s21::parse::PatternConverter>> converters;
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();
@@ -257,7 +257,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision_2) {
 
 TEST_F(PatternParserTest, basic_pattern_recognision_3) {
 
-  std::vector<s21::parse::PatternConverter *> converters;
+  std::vector<std::shared_ptr<s21::parse::PatternConverter>> converters;
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();
@@ -324,7 +324,7 @@ TEST_F(PatternParserTest, basic_pattern_recognision_3) {
 
 TEST_F(PatternParserTest, basic_pattern_recognision_4) {
 
-  std::vector<s21::parse::PatternConverter *> converters;
+  std::vector<std::shared_ptr<s21::parse::PatternConverter>> converters;
   std::vector<s21::parse::FormattingInfo> formatting_infos;
   s21::parse::PatternMap pattern_map =
       get_format_specifiers();

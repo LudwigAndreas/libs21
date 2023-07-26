@@ -16,7 +16,8 @@
 #include <mutex>
 
 #include "logger/logger_macros.h"
-#include "logger/LoggerInitializer.h"
+
+#include "LogManager.h"
 #include "PatternLayout.h"
 
 namespace s21::diagnostic {
@@ -32,20 +33,31 @@ class Logger {
 
   };
 
+  Logger() = default;
+
  public:
+
   Logger(const String& name = "Log4S21",
          s21::diagnostic::LogLevel level = LogLevel::Trace,
          s21::diagnostic::PatternLayout&& layout = PatternLayout());
+
+  Logger(const Logger &) = delete;
+
+  Logger(const Logger &&) = delete;
+
+  Logger& operator=(const Logger&) = delete;
+
+  Logger&& operator=(const Logger&&) = delete;
 
   ~Logger();
 
   const String &GetName() const;
 
-  static Logger* getLogger(const String& name);
+  static LoggerPtr getLogger(const String& name);
 
-  static std::map<String, Logger*> GetLoggerRepo();
+  static std::map<String, LoggerPtr> GetLoggerRepo();
 
-  static Logger* getRootLogger();
+  static LoggerPtr getRootLogger();
 
   void SetPatternLayout(PatternLayout &&pattern_layout);
 
@@ -62,8 +74,6 @@ class Logger {
   void Log(LogLevel level, String file, int line, String func, String message);
 
  private:
-  static std::map<String, Logger*> logger_repo_;
-  static Logger* root;
   LogLevel level_;
   String name_;
   PatternLayout pattern_layout_;

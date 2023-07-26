@@ -23,7 +23,7 @@ std::map<std::string, std::string> s21::properties_reader(const std::string &fil
   std::string line;
   while (std::getline(input_file, line)) {
     size_t comment_pos = line.find(comment_symb);
-    size_t equalPos = line.find('=');
+    size_t equalPos = line.find('=', 0);
 
     // find first symbol after spaces
     size_t first_sym = line.find_first_not_of(' ');

@@ -36,7 +36,7 @@ FILE (GLOB_RECURSE project_SRCS
     ../include/logger/logger_type.h
     ../include/logger/LoggerConfigurator.h
     PatternLayout.cc
-    PidPatternConverter.cc
+    PidPatternConverter.ccp
     LineSeparatorPatternConverter.cc
     MethodLocationPatternConverter.cc
     LevelPatternConverter.cc
@@ -58,6 +58,9 @@ FILE (GLOB_RECURSE project_SRCS
     FullLocationPatternConverter.cc
     LineLocationPatternConverter.cc
     LoggerConfigurator.cc
+    Logger.cc
+    LogManager.cc
+    ../include/logger/LogManager.h
     )
 
 INCLUDE_DIRECTORIES(${MAINFOLDER}/include)
@@ -66,7 +69,7 @@ SET (project_MOC_HEADERS ../include)
 SET (project_LIBS )
 SET (project_BIN ${PROJECT_NAME})
 
-ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS} Logger.cc)
+ADD_LIBRARY(${project_BIN} STATIC ${project_SRCS})
 
 #ADD_EXECUTABLE(${project_BIN}
 #    ${project_SRCS}

@@ -3,34 +3,22 @@
 //
 #include "logger/Logger.h"
 
+#include "logger/LoggerInitializer.h"
+
 namespace s21::diagnostic {
 
-std::map<String, Logger*> Logger::logger_repo_;
-Logger* Logger::root = nullptr;
-
-Logger::StreamInfo::StreamInfo(ToStream &p_stream, bool owned, LogLevel level)  :
+Logger::StreamInfo::StreamInfo(ToStream &p_stream, bool owned, LogLevel level) :
     p_stream(p_stream),
     owned(owned),
     level(level) {}
 
-Logger::Logger(const String& name, LogLevel level,
-               PatternLayout&& layout)
+Logger::Logger(const String &name, LogLevel level,
+               PatternLayout &&layout)
     : level_(level), name_(name), pattern_layout_(std::move(layout)) {
   LoggerInitializer::GetInstance();
-  if (!root)
-    root = this;
-  logger_repo_.insert({name, this});
 }
 
-
 Logger::~Logger() {
-  // for (auto it = logger_repo_.begin(); it != logger_repo_.end(); ++it) {
-  //   if (it->second == this)
-  //     delete
-
-  // }
-  delete logger_repo_.at(name_);
-  logger_repo_.erase(name_);
   ClearOutputStream();
 }
 
@@ -38,18 +26,16 @@ const String &Logger::GetName() const {
   return name_;
 }
 
-Logger *Logger::getLogger(const String &name) {
-  if (!logger_repo_.count(name))
-    return new Logger(name);
-  return logger_repo_.at(name);
+LoggerPtr Logger::getLogger(const String &name) {
+  return LogManager::getLogger(name);
 }
 
-std::map<String, Logger *> Logger::GetLoggerRepo()  {
-  return logger_repo_;
+std::map<String, LoggerPtr> Logger::GetLoggerRepo() {
+  return LogManager::GetLoggerRepo();
 }
 
-Logger *Logger::getRootLogger() {
-  return root;
+LoggerPtr Logger::getRootLogger() {
+  return LogManager::getRootLogger();
 }
 
 void Logger::SetPatternLayout(PatternLayout &&pattern_layout) {
@@ -68,17 +54,17 @@ void Logger::AddOutputStream(ToStream *os, bool own) {
   AddOutputStream(os, own, level_);
 }
 
-void Logger::AddOutputStream(ToStream *os, bool own, LogLevel level)  {
+void Logger::AddOutputStream(ToStream *os, bool own, LogLevel level) {
   StreamInfo stream_info(*os, own, level);
   output_streams_.push_back(stream_info);
 }
 
 void Logger::ClearOutputStream() {
-    for (auto iter = output_streams_.begin(); iter != output_streams_.end();
-         iter = std::next(iter)) {
-      if (iter->owned)
-        delete &iter->p_stream;
-    }
+  for (auto iter = output_streams_.begin(); iter != output_streams_.end();
+       iter = std::next(iter)) {
+    if (iter->owned)
+      delete &iter->p_stream;
+  }
 }
 
 void Logger::Log(LogLevel level,
@@ -112,5 +98,4 @@ void Logger::Log(LogLevel level,
   }
   threading_protection_.unlock();
 }
-
 }
