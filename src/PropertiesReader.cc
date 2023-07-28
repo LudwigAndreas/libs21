@@ -6,7 +6,7 @@
 #include "s21.h"
 
 s21::PropertiesReader::PropertiesReader() {
-  this->file_path = "resources/application.properties";
+  this->file_path_ = "resources/application.properties_";
   updateProperties();
 }
 
@@ -14,29 +14,29 @@ s21::PropertiesReader::~PropertiesReader() {
 }
 
 bool s21::PropertiesReader::updateProperties() {
-  if (!this->file_path.empty()) {
-    this->properties = s21::properties_reader(file_path);
+  if (!this->file_path_.empty()) {
+    this->properties_ = s21::properties_reader(file_path_);
   }
   return true;
 }
 
 s21::PropertiesReader::PropertiesReader(const std::string& file_path) {
-  this->file_path = file_path;
+  this->file_path_ = file_path;
   updateProperties();
 }
 
-void s21::PropertiesReader::set_path(const std::string file_path) {
-  this->file_path = file_path;
+void s21::PropertiesReader::SetPath(const std::string &file_path) {
+  this->file_path_ = file_path;
 }
 
-std::map<std::string, std::string> s21::PropertiesReader::get_properties() {
-  return this->properties;
+std::map<std::string, std::string> s21::PropertiesReader::GetProperties() {
+  return this->properties_;
 }
 
-std::string s21::PropertiesReader::get_property(const std::string& key) {
-  return this->properties.at(key);
+std::string s21::PropertiesReader::GetProperty(const std::string& key) {
+  return this->properties_.at(key);
 }
 
-void s21::PropertiesReader::update() {
+void s21::PropertiesReader::Update() {
   updateProperties();
 }

@@ -12,8 +12,8 @@
 namespace s21 {
 class PropertiesReader {
  protected:
-  std::map<std::string, std::string> properties;
-  std::string file_path;
+  std::map<std::string, std::string> properties_;
+  std::string file_path_;
 
   ~PropertiesReader();
 
@@ -24,13 +24,13 @@ class PropertiesReader {
 
   PropertiesReader(const std::string &file_path);
 
-  void set_path(const std::string file_path);
+  void SetPath(const std::string &file_path);
 
-  std::map<std::string, std::string> get_properties();
+  std::map<std::string, std::string> GetProperties();
 
-  std::string get_property(const std::string &key);
+  std::string GetProperty(const std::string &key);
 
-  void update();
+  void Update();
 };
 }
 
