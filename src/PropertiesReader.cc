@@ -2,7 +2,7 @@
 // Created by Ludwig Andreas on 15.07.2023.
 //
 
-#include "logger/PropertiesReader.h"
+#include "PropertiesReader.h"
 #include "s21.h"
 
 s21::PropertiesReader::PropertiesReader() {
