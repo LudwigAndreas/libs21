@@ -3,6 +3,4 @@
 
 #include <gtest/gtest.h>
 
-#include "logger/Logger.h"
-
 #endif //S21_TEST_TEST_H_
